@@ -1,0 +1,120 @@
+<div class="container">
+  <div class = "row">
+    <div class="col-md-8">
+      <md-card class="oppia-page-card oppia-long-text" style="max-width: 900px">
+        <!--h3>View Roles</h3-->
+         <div class="form-for-view-role">
+          <form class="form-horizontal">
+            <fieldset>
+            <!-- Form Name -->
+            <legend>View User Roles</legend>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="selectbasic">Select Method</label>
+              <div class="col-md-4">
+                <select id="selectbasic" name="selectbasic" class="form-control">
+                  <option value="1">By Role</option>
+                  <option value="2">By Username</option>
+                </select>
+              </div>
+            </div>
+             <!--div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Enter Username</label>  
+            <div class="col-md-4">
+            <input id="textinput" name="textinput" type="text" placeholder="username" class="form-control input-md">
+              
+            </div--> 
+            <!-- Select Basic -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="selectbasic">Select Role</label>
+              <div class="col-md-4">
+                <select id="selectbasic" name="selectbasic" class="form-control">
+                  <option value="1">BANNED_USER</option>
+                  <option value="2">COLLECTION_EDITOR</option>
+                  <option value="3">MODERATOR</option>
+                  <option value="4">ADMIN</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button class="col-md-offset-4 btn btn-primary" ng-disabled="1==2" type=button>Submit</button>
+            </div>
+            </fieldset>
+          </form>
+         </div>
+         <hr>
+         <!--table class="table text-center">
+          <thead>
+            <tr>
+              <td> Username </td>
+              <td> Role </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> Yogesh </td>
+              <td> MODERATOR</td>
+            </tr>
+            <tr>
+              <td> TEST </td>
+              <td> MODERATOR </td>
+            </tr>
+          </tbody>
+         </table-->
+      </md-card>
+
+      <md-card class="oppia-page-card oppia-long-text" style="max-width: 900px">
+        <form class="form-horizontal">
+          <fieldset>
+
+          <!-- Form Name -->
+          <legend>Update User Role</legend>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Enter Username</label>  
+            <div class="col-md-4">
+            <input id="textinput" name="textinput" type="text" placeholder="username" class="form-control input-md">
+              
+            </div>
+          </div>
+
+          <!-- Select Basic -->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="selectbasic">Select Role</label>
+            <div class="col-md-4">
+              <select id="selectbasic" name="selectbasic" class="form-control">
+                <option value="1">BANNED_USER</option>
+                <option value="2">EXPLORATION_EDITOR</option>
+                <option value="3">COLLECTION_EDITOR</option>
+                <option value="4">MODERATOR</option>
+                <option value="5">ADMIN</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button class="col-md-offset-4 btn btn-primary" ng-disabled="1==2" type="button">Update</button>
+          </div>
+
+          </fieldset>
+        </form>
+        
+        <hr>
+        <p class="text-danger text-center">Error: Username random does not exist.</p>
+      </md-card>
+    </div>
+
+    <div class="col-md-4">
+      <md-card class="oppia-page-card oppia-long-text" style="max-width: 900px">
+        <h3>Role Hierarchy</h3>
+        <div state-graph-viz graph-data="graphData()" current-state-id="currentStateId()" on-click-function="" on-delete-function="" on-maximize-function="" allow-panning="false" center-at-current-state="" is-editable="false" show-warning-sign="false" node-fill="white">
+        </div>
+
+      </md-card>
+    </div>
+
+  </div>
+</div>

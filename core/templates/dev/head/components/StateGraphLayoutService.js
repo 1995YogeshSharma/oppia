@@ -27,9 +27,12 @@ oppia.factory('StateGraphLayoutService', [
     var lastComputedArrangement = null;
 
     var getGraphAsAdjacencyLists = function(nodes, links) {
+      // console.log(nodes);
+      // console.log(links);
       var adjacencyLists = {};
 
       for (var nodeId in nodes) {
+        console.log(nodeId);
         adjacencyLists[nodeId] = [];
       }
       for (var i = 0; i < links.length; i++) {

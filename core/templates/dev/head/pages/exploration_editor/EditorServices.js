@@ -1744,6 +1744,7 @@ oppia.factory('graphDataService', [
         _recomputeGraphData();
       },
       getGraphData: function() {
+        console.log(_graphData);
         return angular.copy(_graphData);
       }
     };

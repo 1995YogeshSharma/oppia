@@ -21,6 +21,7 @@ oppia.constant('ADMIN_TAB_URLS', {
   ACTIVITIES: '#activities',
   JOBS: '#jobs',
   CONFIG: '#config',
+  ROLES: '#roles',
   MISC: '#misc'
 });
 
@@ -67,6 +68,10 @@ oppia.factory('AdminRouterService', [
        */
       isConfigTabOpen: function() {
         return currentTabHash === ADMIN_TAB_URLS.CONFIG;
+      },
+
+      isRolesTabOpen: function() {
+        return currentTabHash === ADMIN_TAB_URLS.ROLES;
       },
 
       /**
