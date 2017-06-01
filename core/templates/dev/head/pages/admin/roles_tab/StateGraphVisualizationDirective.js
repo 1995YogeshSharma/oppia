@@ -294,7 +294,7 @@ oppia.directive('stateGraphViz', [
               //   warning = 'Warning: this state is unreachable.';
               // } else if (node.reachableFromEnd === false) {
               //   warning = (
-              //     'Warning: there is no path from this state to the END state.'
+              // 'Warning: there is no path from this state to the END state.'
               //     );
               // }
 
@@ -374,7 +374,7 @@ oppia.directive('stateGraphViz', [
             }
 
             $scope.getNodeErrorMessage = function(nodeLabel) {
-              return "";
+              return '';
               //return "this is warning";
             };
 
