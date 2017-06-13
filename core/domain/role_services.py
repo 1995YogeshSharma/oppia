@@ -39,6 +39,24 @@ ACTION_UPDATE_FEATURED_ACTIVITIES = 'UPDATE_FEATURED_ACTIVITIES'
 ACTION_VIEW_COLLECTION_RIGHTS = 'VIEW_COLLECTION_RIGHTS'
 ACTION_VIEW_EXPLORATION_STATS = 'VIEW_EXPLORATION_STATS'
 
+# Users can be updated to the following list of roles via admin interface.
+UPDATABLE_ROLES = [
+    feconf.ROLE_ADMIN,
+    feconf.ROLE_BANNED_USER,
+    feconf.ROLE_COLLECTION_EDITOR,
+    feconf.ROLE_EXPLORATION_EDITOR,
+    feconf.ROLE_MODERATOR
+]
+
+# Users can be viewed by following list of roles via admin interface.
+VIEWABLE_ROLES = [
+    feconf.ROLE_ADMIN,
+    feconf.ROLE_BANNED_USER,
+    feconf.ROLE_COLLECTION_EDITOR,
+    feconf.ROLE_MODERATOR,
+    feconf.ROLE_SUPER_ADMIN
+]
+
 # This dict represents how the actions are inherited among different
 # roles in the site.
 #   key -> name of role
@@ -50,7 +68,7 @@ ACTION_VIEW_EXPLORATION_STATS = 'VIEW_EXPLORATION_STATS'
 #   corresponding to 'COLLECTION_EDITOR'.}
 #
 # NOTE FOR DEVELOPERS:
-# - Follow the Playbook in wiki(https://github.com/oppia/oppia/wiki/
+# - Follow the Playbook in wiki (https://github.com/oppia/oppia/wiki/
 #   Instructions-for-editing-roles-or-actions) before making any changes to
 #   this dict.
 #
@@ -60,7 +78,7 @@ PARENT_ROLES = {
     feconf.ROLE_ADMIN: [feconf.ROLE_MODERATOR],
     feconf.ROLE_BANNED_USER: [feconf.ROLE_GUEST],
     feconf.ROLE_COLLECTION_EDITOR: [feconf.ROLE_EXPLORATION_EDITOR],
-    feconf.ROLE_EXPLORATION_EDITOR: [feconf.ROLE_BANNED_USER],
+    feconf.ROLE_EXPLORATION_EDITOR: [feconf.ROLE_GUEST],
     feconf.ROLE_GUEST: [],
     feconf.ROLE_MODERATOR: [feconf.ROLE_COLLECTION_EDITOR],
     feconf.ROLE_SUPER_ADMIN: [feconf.ROLE_ADMIN]
@@ -73,7 +91,7 @@ PARENT_ROLES = {
 #   value -> list of unique actions.
 #
 # NOTE FOR DEVELOPERS :
-# - Follow the Playbook in wiki(https://github.com/oppia/oppia/wiki/
+# - Follow the Playbook in wiki (https://github.com/oppia/oppia/wiki/
 #   Instructions-for-editing-roles-or-actions) before making any changes to
 #   this dict.
 ROLE_ACTIONS = {
@@ -108,6 +126,17 @@ ROLE_ACTIONS = {
 }
 
 
+def get_human_readable_role(role):
+    """Converts role to human readable format.
+
+    Args:
+        role: str. The role to convert.
+    Returns:
+        str. Role in human readable format.
+    """
+    return role.lower().replace('_', ' ')
+
+
 def get_all_actions(role):
     """Returns a list of all actions (including inherited actions)
     that can be performed by the given role.
@@ -131,3 +160,29 @@ def get_all_actions(role):
         role_actions.extend(get_all_actions(parent_role))
 
     return list(set(role_actions))
+
+
+def get_role_graph_data():
+    """Returns dict for displaying roles graph.
+
+    Returns:
+        dict. A dict containing data in following format:
+        {
+            links: list(dict(str:str)). List of dicts defing each edge in
+                following format:
+                    {
+                        source: RoleId from which edge is going out.
+                        target: RoleId to which edge is incoming.
+                    }
+            nodes: dict(str:str). Mapping of roleId to its human readable
+                format.
+        }
+    """
+    role_graph = {}
+    role_graph['links'] = []
+    role_graph['nodes'] = {}
+    for role in PARENT_ROLES:
+        role_graph['nodes'][role] = get_human_readable_role(role)
+        for parent in PARENT_ROLES[role]:
+            role_graph['links'].append({'source': parent, 'target': role})
+    return role_graph

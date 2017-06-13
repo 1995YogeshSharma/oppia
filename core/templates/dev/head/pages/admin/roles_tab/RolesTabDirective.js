@@ -13,119 +13,115 @@
 // limitations under the License.
 
 /**
- * @fileoverview Directive for the jobs tab in the admin panel.
+ * @fileoverview Directive for the Roles tab in the admin panel.
  */
 
 oppia.directive('adminRolesTab', [
-  '$http', 'ADMIN_HANDLER_URL', 'UrlInterpolationService',
+  '$http', 'ADMIN_ROLE_HANDLER_URL', 'AdminTaskManagerService',
+  'UrlInterpolationService', 'ADMIN_SHOW_UPDATE_ROLE',
   function(
-      $http, ADMIN_HANDLER_URL, UrlInterpolationService) {
+    $http, ADMIN_ROLE_HANDLER_URL, AdminTaskManagerService,
+    UrlInterpolationService, ADMIN_SHOW_UPDATE_ROLE) {
     return {
       restrict: 'E',
       scope: {
         setStatusMessage: '='
       },
       templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(
-        '/pages/admin/roles_tab/' +
-        'roles_tab_directive.html'),
+        '/pages/admin/roles_tab/roles_tab_directive.html'),
       controller: ['$scope', function($scope) {
-        //defining the scope variables from Globals to be used here.
-        $scope.HUMAN_READABLE_CURRENT_TIME = (
-          GLOBALS.HUMAN_READABLE_CURRENT_TIME);
+        $scope.UPDATABLE_ROLES = GLOBALS.UPDATABLE_ROLES;
+        $scope.VIEWABLE_ROLES = GLOBALS.VIEWABLE_ROLES;
+        $scope.graphData = GLOBALS.ROLE_GRAPH_DATA;
+        $scope.showResultRoles = false;
+        $scope.result = {};
+        $scope.setStatusMessage('');
+        $scope.showUpdateForm = ADMIN_SHOW_UPDATE_ROLE;
+        $scope.viewFormValues = {};
+        $scope.updateFormValues = {};
+        $scope.viewFormValues.method = 'role';
 
-    //     $scope.showJobOutput = function(jobId) {
-    //       var adminJobOutputUrl = UrlInterpolationService.interpolateUrl(
-    //         ADMIN_JOB_OUTPUT_URL_TEMPLATE, {
-    //           jobId: jobId
-    //         });
-    //       $http.get(adminJobOutputUrl).then(function(response) {
-    //         $scope.showingJobOutput = true;
-    //         $scope.jobOutput = response.data.output || [];
-    //         $scope.jobOutput.sort();
-    //         $timeout(function() {
-    //           document.querySelector('#job-output').scrollIntoView();
-    //         });
-    //       });
-    //     };
-
-    //     $scope.startNewJob = function(jobType) {
-    //       $scope.setStatusMessage('Starting new job...');
-
-    //       $http.post(ADMIN_HANDLER_URL, {
-    //         action: 'start_new_job',
-    //         job_type: jobType
-    //       }).then(function() {
-    //         $scope.setStatusMessage('Job started successfully.');
-    //         window.location.reload();
-    //       }, function(errorResponse) {
-    //         $scope.setStatusMessage(
-    //           'Server error: ' + errorResponse.data.error);
-    //       });
-    //     };
-
-    //     $scope.cancelJob = function(jobId, jobType) {
-    //       $scope.setStatusMessage('Cancelling job...');
-
-    //       $http.post(ADMIN_HANDLER_URL, {
-    //         action: 'cancel_job',
-    //         job_id: jobId,
-    //         job_type: jobType
-    //       }).then(function() {
-    //         $scope.setStatusMessage('Abort signal sent to job.');
-    //         window.location.reload();
-    //       }, function(errorResponse) {
-    //         $scope.setStatusMessage(
-    //           'Server error: ' + errorResponse.data.error);
-    //       });
-    //     };
-
-    //     $scope.startComputation = function(computationType) {
-    //       $scope.setStatusMessage('Starting computation...');
-
-    //       $http.post(ADMIN_HANDLER_URL, {
-    //         action: 'start_computation',
-    //         computation_type: computationType
-    //       }).then(function() {
-    //         $scope.setStatusMessage('Computation started successfully.');
-    //         window.location.reload();
-    //       }, function(errorResponse) {
-    //         $scope.setStatusMessage(
-    //           'Server error: ' + errorResponse.data.error);
-    //       });
-    //     };
-
-        // $scope.stopComputation = function(computationType) {
-        //   $scope.setStatusMessage('Stopping computation...');
-
-        //   $http.post(ADMIN_HANDLER_URL, {
-        //     action: 'stop_computation',
-        //     computation_type: computationType
-        //   }).then(function() {
-        //     $scope.setStatusMessage('Abort signal sent to computation.');
-        //     window.location.reload();
-        //   }, function(errorResponse) {
-        //     $scope.setStatusMessage(
-        //       'Server error: ' + errorResponse.data.error);
-        //    });
-        //  };
-
-        $scope.view_roles = [
-            'BANNED_USER', 'COLLECTION_EDITOR', 'MODERATOR',
-            'ADMIN'
-        ]
-
-        $scope.values = {}
-
-        $scope.SubmitRoleViewForm = function(values) {
-            if(values.method == "1") {
-                console.log(values.method + " " + values.role);
+        $scope.graphDataLoaded = false;
+        // Calculating initStateId and finalStateIds for graphData
+        // Since role graph is acyclic, node with no incoming edge
+        // is initState and nodes with no outgoing edge are finalStates.
+        var hasIncomingEdge = [];
+        var hasOutgoingEdge = [];
+        for (var i = 0; i < $scope.graphData.links.length; i++) {
+          hasIncomingEdge.push($scope.graphData.links[i].target);
+          hasOutgoingEdge.push($scope.graphData.links[i].source);
+        }
+        var finalStateIds = [];
+        for (var role in $scope.graphData.nodes) {
+          if ($scope.graphData.nodes.hasOwnProperty(role)) {
+            if (hasIncomingEdge.indexOf(role) == -1) {
+              $scope.graphData.initStateId = role;
             }
-            else if(values.method == "2") {
-                console.log(values.method + " " + values.username);
+            if (hasOutgoingEdge.indexOf(role) == -1) {
+              finalStateIds.push(role);
             }
+          }
+        }
+        $scope.graphData.finalStateIds = finalStateIds;
+        $scope.graphDataLoaded = true;
+
+        $scope.submitRoleViewForm = function(values) {
+          if (AdminTaskManagerService.isTaskRunning()) {
+            return;
+          }
+
+          $scope.setStatusMessage('Processing query...');
+
+          AdminTaskManagerService.startTask();
+          $scope.result = {};
+          $http.get(ADMIN_ROLE_HANDLER_URL, {
+            params: {
+              method: values.method,
+              role: values.role,
+              username: values.username
+            }
+          }).then(function(response) {
+            $scope.result = response.data;
+            if (Object.keys($scope.result).length == 0) {
+              $scope.showResultRoles = false;
+              $scope.setStatusMessage('No results.');
+            }
+            else {
+              $scope.showResultRoles = true;
+              $scope.setStatusMessage('Success.');
+            }
+            $scope.viewFormValues.username = '';
+            $scope.viewFormValues.role = '';
+          }, function(errorResponse) {
+            $scope.setStatusMessage(
+              'Server error: ' + errorResponse.data.error);
+          });
+          AdminTaskManagerService.finishTask();
         }
 
-       }]
+        $scope.submitUpdateRoleForm = function(values) {
+          if (AdminTaskManagerService.isTaskRunning()) {
+            return;
+          }
+          
+          $scope.setStatusMessage('Updating User Role');
+          AdminTaskManagerService.startTask();
+          $http.post(ADMIN_ROLE_HANDLER_URL, {
+            role: values.newRole,
+            username: values.username
+          }).then(function() {
+            $scope.setStatusMessage(
+              'Role of ' + values.username +
+              ' successfully updated to ' + values.newRole);
+            $scope.updateFormValues.username = '';
+            $scope.updateFormValues.newRole = '';
+          }, function(errorResponse) {
+            $scope.setStatusMessage(
+              'Server error: ' + errorResponse.data.error);
+          });
+          AdminTaskManagerService.finishTask();
+        }
+      }]
     };
   }
 ]);
