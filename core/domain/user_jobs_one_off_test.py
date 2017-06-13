@@ -22,7 +22,6 @@ import re
 
 from core.domain import collection_domain
 from core.domain import collection_services
-from core.domain import config_domain
 from core.domain import config_services
 from core.domain import exp_services
 from core.domain import event_services
@@ -1142,7 +1141,7 @@ class UserLastExplorationActivityOneOffJobTests(test_utils.GenericTestBase):
         self.assertIsNone(owner_settings.last_edited_an_exploration)
 
 
-class UserRoleMigrationOneOffJobTests(test_utils.GenericTestBase):
+class UserRolesMigrationOneOffJobTests(test_utils.GenericTestBase):
 
     def test_create_user_with_different_roles_and_run_migration_job(self):
         USER_IDS = [
@@ -1167,24 +1166,23 @@ class UserRoleMigrationOneOffJobTests(test_utils.GenericTestBase):
         admin_usernames = ['user2', 'user3']
         moderator_usernames = ['user4', 'user5']
         banned_usernames = ['user6']
-        collection_editor_usernames = ['user7']
-        exploration_editor_usernames = ['user8']
+        collection_editor_usernames = ['user7', 'user8']
 
-        self.set_config_property(
-            config_domain.ADMIN_USERNAMES, admin_usernames)
-        self.set_config_property(
-            config_domain.MODERATOR_USERNAMES, moderator_usernames)
-        self.set_config_property(
-            config_domain.WHITELISTED_EMAIL_SENDERS, super_admin_usernames)
-        self.set_config_property(
-            config_domain.WHITELISTED_COLLECTION_EDITOR_USERNAMES,
+        config_services.set_property(
+            'admin_id', 'admin_usernames', admin_usernames)
+        config_services.set_property(
+            'admin_id', 'moderator_usernames', moderator_usernames)
+        config_services.set_property(
+            'admin_id', 'banned_usernames', banned_usernames)
+        config_services.set_property(
+            'admin_id', 'collection_editor_whitelist',
             collection_editor_usernames)
-        self.set_config_property(
-            config_domain.BANNED_USERNAMES, banned_usernames)
+        config_services.set_property(
+            'admin_id', 'whitelisted_email_senders', super_admin_usernames)
 
         job_id = (
             user_jobs_one_off.UserRolesMigrationOneOffJob.create_new())
-        user_jobs_one_off.UserRolesMigrationJob.enqueue(job_id)
+        user_jobs_one_off.UserRolesMigrationOneOffJob.enqueue(job_id)
         self.process_and_flush_pending_tasks()
 
         admins_by_role = user_services.get_usernames_by_role(
@@ -1197,8 +1195,6 @@ class UserRoleMigrationOneOffJobTests(test_utils.GenericTestBase):
             feconf.ROLE_BANNED_USER)
         collection_editors_by_role = user_services.get_usernames_by_role(
             feconf.ROLE_COLLECTION_EDITOR)
-        exploration_editors_by_role = user_services.get_usernames_by_role(
-            feconf.ROLE_EXPLORATION_EDITOR)
 
         self.assertEqual(
             set(admin_usernames), set(admins_by_role))
@@ -1210,6 +1206,3 @@ class UserRoleMigrationOneOffJobTests(test_utils.GenericTestBase):
             set(banned_usernames), set(banned_users_by_role))
         self.assertEqual(
             set(collection_editor_usernames), set(collection_editors_by_role))
-        self.assertEqual(
-            set(exploration_editor_usernames),
-            set(exploration_editors_by_role))
