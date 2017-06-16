@@ -350,6 +350,7 @@ class UserRolesMigrationOneOffJob(jobs.BaseMapReduceJobManager):
             'collection_editor_whitelist')
         email_senders = config_domain.Registry.get_config_property(
             'whitelisted_email_senders')
+        admin_usernames.extend(email_senders)
 
         try:
             if user_model.username in admin_usernames.value:
@@ -364,15 +365,12 @@ class UserRolesMigrationOneOffJob(jobs.BaseMapReduceJobManager):
             elif user_model.username in collection_editors.value:
                 user_services.update_user_role(
                     user_model.id, feconf.ROLE_COLLECTION_EDITOR)
-            elif user_model.username in email_senders.value:
-                user_services.update_user_role(
-                    user_model.id, feconf.ROLE_SUPER_ADMIN)
             else:
                 user_services.update_user_role(
                     user_model.id, feconf.ROLE_EXPLORATION_EDITOR)
-            yield(user_model.username, 'Role successfully attached.')
-        except Exception:
-            yield(user_model.username, 'Some error ocurred.')
+            yield ('success ', 'Role successfully attached.')
+        except Exception as e:
+            yield (user_model.username, unicode(e))
 
     @staticmethod
     def reduce(key, value):
