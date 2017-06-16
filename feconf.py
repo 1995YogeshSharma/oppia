@@ -522,6 +522,7 @@ TASK_URL_SUGGESTION_EMAILS = (
 
 # TODO(sll): Add all other URLs here.
 ADMIN_URL = '/admin'
+ADMIN_ROLE_HANDLER_URL = '/adminrolehandler'
 COLLECTION_DATA_URL_PREFIX = '/collection_handler/data'
 COLLECTION_SUMMARIES_DATA_URL = '/collectionsummarieshandler/data'
 EDITABLE_COLLECTION_DATA_URL_PREFIX = '/collection_editor_handler/data'
@@ -976,3 +977,8 @@ ROLE_COLLECTION_EDITOR = 'COLLECTION_EDITOR'
 ROLE_MODERATOR = 'MODERATOR'
 ROLE_ADMIN = 'ADMIN'
 ROLE_SUPER_ADMIN = 'SUPER_ADMIN'
+
+# Intent of the User making query to role structure via admin interface. Used
+# to store audit data regarding queries to roleIds.
+VIEW_ROLE = 'View user roles.'
+UPDATE_ROLE = 'Update user role.'

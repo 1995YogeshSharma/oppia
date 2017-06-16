@@ -187,7 +187,7 @@ class AdminHandler(base.BaseHandler):
                     if name == 'whitelisted_email_senders':
                         check_and_update_config_role(
                             config_properties[name]['value'], value,
-                            feconf.ROLE_SUPER_ADMIN)
+                            feconf.ROLE_ADMIN)
                     if name == 'admin_usernames':
                         check_and_update_config_role(
                             config_properties[name]['value'], value,
@@ -221,7 +221,7 @@ class AdminHandler(base.BaseHandler):
                 if config_property_id == 'whitelisted_email_senders':
                     check_and_update_config_role(
                         config_value, config_property.default_value,
-                        feconf.ROLE_SUPER_ADMIN)
+                        feconf.ROLE_ADMIN)
                 if config_property_id == 'admin_usernames':
                     check_and_update_config_role(
                         config_value, config_property.default_value,
@@ -306,10 +306,15 @@ class AdminRoleHandler(base.BaseHandler):
                 username: role
                 for username in user_services.get_usernames_by_role(role)
             }
+            role_services.store_role_query(
+                self.user_id, feconf.VIEW_ROLE, method='role', role=role)
             self.render_json(users_by_role)
         elif view_method == 'username':
             username = self.request.params['username']
             userid = user_services.get_user_id_from_username(username)
+            role_services.store_role_query(
+                self.user_id, feconf.VIEW_ROLE, method='username',
+                username=username)
             if userid is None:
                 self.render_json({})
             else:
@@ -323,10 +328,13 @@ class AdminRoleHandler(base.BaseHandler):
     @require_super_admin
     def post(self):
         try:
-            userid = user_services.get_user_id_from_username(
-                self.payload.get('username'))
-            user_services.update_user_role(
-                userid, self.payload.get('role'))
+            username = self.payload.get('username')
+            role = self.payload.get('role')
+            userid = user_services.get_user_id_from_username(username)
+            user_services.update_user_role(userid, role)
+            role_services.store_role_query(
+                self.user_id, feconf.UPDATE_ROLE, role=role,
+                username=username)
             self.render_json({})
         except Exception as e:
             self.render_json({'error': unicode(e)})
