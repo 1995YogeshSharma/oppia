@@ -15,6 +15,7 @@
 """Jobs for queries personalized to individual users."""
 
 import ast
+import logging
 
 from core import jobs
 from core.domain import config_domain
@@ -350,7 +351,7 @@ class UserRolesMigrationOneOffJob(jobs.BaseMapReduceJobManager):
             'collection_editor_whitelist')
         email_senders = config_domain.Registry.get_config_property(
             'whitelisted_email_senders')
-        admin_usernames.extend(email_senders)
+        admin_usernames.value.extend(email_senders.value)
 
         try:
             if user_model.username in admin_usernames.value:
@@ -370,6 +371,7 @@ class UserRolesMigrationOneOffJob(jobs.BaseMapReduceJobManager):
                     user_model.id, feconf.ROLE_EXPLORATION_EDITOR)
             yield ('success ', 'Role successfully attached.')
         except Exception as e:
+            logging.error('Exception raised: %s' % e)
             yield (user_model.username, unicode(e))
 
     @staticmethod
