@@ -16,8 +16,8 @@
 
 """Models for storing the audit logs."""
 
-import feconf
 from core.platform import models
+import feconf
 from google.appengine.ext import ndb
 
 (base_models,) = models.Registry.import_models([models.NAMES.base_model])
@@ -26,16 +26,21 @@ from google.appengine.ext import ndb
 class RoleQueryAuditModel(base_models.BaseModel):
     """Records the data for query made to the role structure using admin
     interface.
+
+    Instances of this class are keyed by a custom Id
+    [user_id].[timestamp_in_sec].[intent].[random_number]
     """
+    # The id used to key this model.
+    model_id = ndb.StringProperty(required=True)
     # The user_id of the user making query.
     user_id = ndb.StringProperty(required=True, indexed=True)
-    # The intent of making query (viewing role or updating role).
+    # The intent of making query (viewing (by role or username)
+    # or updating role).
     intent = ndb.StringProperty(required=True, choices=[
-        feconf.UPDATE_ROLE,
-        feconf.VIEW_ROLE
+        feconf.ROLE_ACTION_UPDATE,
+        feconf.ROLE_ACTION_VIEW_BY_ROLE,
+        feconf.ROLE_ACTION_VIEW_BY_USERNAME
     ])
-    # The method used for viewing role.
-    view_method = ndb.StringProperty(default=None)
     # The role being queried for.
     role = ndb.StringProperty(default=None)
     # The username in the query.
