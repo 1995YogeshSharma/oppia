@@ -1828,10 +1828,15 @@ def _create_change_list_from_suggestion(suggestion):
                 object.
     """
 
-    return [{'cmd': exp_domain.CMD_EDIT_STATE_PROPERTY,
-             'state_name': suggestion.state_name,
-             'property_name': exp_domain.STATE_PROPERTY_CONTENT,
-             'new_value': [suggestion.state_content]}]
+    return [{
+        'cmd': exp_domain.CMD_EDIT_STATE_PROPERTY,
+        'state_name': suggestion.state_name,
+        'property_name': exp_domain.STATE_PROPERTY_CONTENT,
+        'new_value': {
+            'html': suggestion.suggestion_html,
+            'audio_translations': []
+        }
+    }]
 
 
 def _get_commit_message_for_suggestion(
@@ -1965,14 +1970,12 @@ def create_or_update_draft(
         exp_user_data = user_models.ExplorationUserDataModel.create(
             user_id, exp_id)
 
-    draft_id = exp_user_data.draft_change_list_id
-    if draft_id is None:
-        draft_id = 0
-    draft_id += 1
+    draft_change_list_id = exp_user_data.draft_change_list_id
+    draft_change_list_id += 1
     exp_user_data.draft_change_list = change_list
     exp_user_data.draft_change_list_last_updated = current_datetime
     exp_user_data.draft_change_list_exp_version = exp_version
-    exp_user_data.draft_change_list_id = draft_id
+    exp_user_data.draft_change_list_id = draft_change_list_id
     exp_user_data.put()
 
 
