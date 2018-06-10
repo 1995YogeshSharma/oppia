@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/collection_player/collection_footer_directive.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<div class="footer navbar-fixed-bottom oppia-collection-footer">\n  <div class="row">\n    <div class="col-sm-5">\n      <ul>\n        <li>\n          <img ng-src="<[getStaticImageUrl(\'/general/apple.svg\')]>" class="collection-footer-img" alt="">\n        </li>\n      </ul>\n    </div>\n    <div class="col-sm-7">\n      <div class="pull-right">\n        <ul>\n          <li>\n            <h4 translate="I18N_PLAYER_SHARE_THIS_COLLECTION" class="oppia-share-collection-footer"></h4>\n          </li>\n          <li>\n            <sharing-links ng-click="$event.stopPropagation()"\n                           twitter-text="getTwitterText()"\n                           collection-id="collectionId"\n                           layout-type="row"\n                           share-type="collection"\n                           class="oppia-collection-footer-sharing-links">\n            </sharing-links>\n          </li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>\n\n<style>\n  .oppia-collection-footer {\n    background-color: #094142;\n    color: #FFF;\n    font-family: "Capriola", "Roboto", Arial, sans-serif;\n    font-size: 13px;\n    height: 42px;\n    line-height: 0;\n    margin-top: 30px;\n    width: 100%;\n  }\n\n  .oppia-collection-footer .collection-footer-img {\n    height: 60px;\n    margin: -25px 0 0 10px;\n    width: 60px;\n  }\n\n  .oppia-collection-footer ul {\n    color: #fff;\n    list-style-type: none;\n    padding-left: 0;\n  }\n\n  .oppia-collection-footer li {\n    float: left;\n  }\n\n  .oppia-collection-footer .oppia-share-collection-footer {\n    line-height: 0.6;\n    padding-right: 20px;\n    text-transform: uppercase;\n  }\n\n  .oppia-collection-footer .oppia-collection-footer-container {\n    max-width: 800px;\n  }\n\n  .oppia-collection-footer .oppia-collection-footer-sharing-links ul {\n    display: block;\n    float: right;\n    padding-right: 20px;\n    margin: -8px;\n  }\n\n  .oppia-collection-footer .oppia-collection-footer-sharing-links li {\n    float: left;\n  }\n\n  @media (max-width: 475px) {\n    .oppia-collection-footer-sharing-links {\n      display: none;\n    }\n  }\n\n  @media (max-width: 658px) {\n    .oppia-share-collection-footer {\n      display: none;\n    }\n  }\n</style>'
+
+blocks = {}
+debug_info = ''

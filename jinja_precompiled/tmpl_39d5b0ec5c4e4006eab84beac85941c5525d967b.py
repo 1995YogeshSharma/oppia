@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/exploration_editor/statistics_tab/state_stats_modal_directive.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<div class="modal-header">\n  <h3>Statistics for "<a ng-click="navigateToStateEditor()"><[stateName]></a>"</h3>\n</div>\n\n<div class="modal-body oppia-state-stats-modal-body">\n  <div class="oppia-state-stats-warning" ng-if="improvementType">\n    <div ng-if="improvementType == \'May be confusing\'">\n      <i class="material-icons">&#xE002;</i>\n      <em>\n        This state may be confusing. Learners often leave the exploration when encountering it.\n      </em>\n    </div>\n\n    <div ng-if="improvementType == \'Needs more feedback\'">\n      <i class="material-icons">&#xE002;</i>\n      <em>\n        This state may need more feedback. Learners often return to it after giving an answer.\n      </em>\n    </div>\n  </div>\n\n  <div class="section">\n    <div style="display: inline-block;">\n      <p>\n        <strong>Card entered</strong>: <[stateStats.total_hit_count]> <strong> times. </strong>\n      </p>\n    </div>\n    <div style="display: inline-block; padding-left: 170px;">\n      <strong>Quit at this card</strong>: <[stateStats.total_hit_count - stateStats.num_completions]> <strong> times. </strong>\n    </div>\n  </div>\n\n  <div class="section" ng-if="hasExplorationBeenAnswered">\n    <div style="display: inline-block;">\n      <pie-chart data="pieChartData1"\n                 options="COMPLETION_RATE_PIE_CHART_OPTIONS1">\n      </pie-chart>\n    </div>\n    <div style="display: inline-block; padding-left: 76px;">\n      <pie-chart data="pieChartData2"\n                 options="COMPLETION_RATE_PIE_CHART_OPTIONS2">\n      </pie-chart>\n    </div>\n  </div>\n\n  <div class="section" angular-html-bind="visualizationsHtml"></div>\n</div>\n\n<div class="modal-footer">\n  <button class="btn btn-default" ng-click="cancel()">Close</button>\n</div>\n\n<style>\n  .oppia-state-stats-modal-body .section {\n    margin-top: 18px;\n  }\n\n  .oppia-state-stats-warning {\n    background: #f9edbe;\n    border-radius: 2px;\n    padding: 12px;\n    width: 100%;\n  }\n</style>'
+
+blocks = {}
+debug_info = ''

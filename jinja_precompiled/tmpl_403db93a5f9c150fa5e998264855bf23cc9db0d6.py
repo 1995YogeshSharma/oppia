@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'services/stateful/FocusManagerService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2014 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Service for setting focus. This broadcasts a \'focusOn\' event\n * which sets focus to the element in the page with the corresponding focusOn\n * attribute.\n * Note: This requires LABEL_FOR_CLEARING_FOCUS to exist somewhere in the HTML\n * page.\n */\n\noppia.factory(\'FocusManagerService\', [\n  \'$rootScope\', \'$timeout\', \'DeviceInfoService\', \'LABEL_FOR_CLEARING_FOCUS\',\n  \'IdGenerationService\',\n  function(\n      $rootScope, $timeout, DeviceInfoService, LABEL_FOR_CLEARING_FOCUS,\n      IdGenerationService) {\n    var _nextLabelToFocusOn = null;\n    return {\n      clearFocus: function() {\n        this.setFocus(LABEL_FOR_CLEARING_FOCUS);\n      },\n      setFocus: function(name) {\n        if (_nextLabelToFocusOn) {\n          return;\n        }\n\n        _nextLabelToFocusOn = name;\n        $timeout(function() {\n          $rootScope.$broadcast(\'focusOn\', _nextLabelToFocusOn);\n          _nextLabelToFocusOn = null;\n        });\n      },\n      setFocusIfOnDesktop: function(newFocusLabel) {\n        if (!DeviceInfoService.isMobileDevice()) {\n          this.setFocus(newFocusLabel);\n        }\n      },\n      // Generates a random string (to be used as a focus label).\n      generateFocusLabel: function() {\n        return IdGenerationService.generateNewId();\n      }\n    };\n  }\n]);'
+
+blocks = {}
+debug_info = ''

@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'services/NestedDirectivesRecursionTimeoutPreventionService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Service prevents timeouts due to recursion\n * in nested directives. See: http://stackoverflow.com/q/14430655\n */\n\noppia.factory(\'NestedDirectivesRecursionTimeoutPreventionService\', [\n  \'$compile\',\n  function($compile) {\n    return {\n      /**\n       * Manually compiles the element, fixing the recursion loop.\n       * @param {DOM element} element\n       * @param {function|object} link - A post-link function, or an object with\n       *   function(s) registered via pre and post properties.\n       * @return {object} An object containing the linking functions.\n       */\n      compile: function(element, link) {\n        // Normalize the link parameter\n        if (angular.isFunction(link)) {\n          link = {\n            post: link\n          };\n        }\n\n        // Break the recursion loop by removing the contents,\n        var contents = element.contents().remove();\n        var compiledContents;\n        return {\n          pre: (link && link.pre) ? link.pre : null,\n          post: function(scope, element) {\n            // Compile the contents.\n            if (!compiledContents) {\n              compiledContents = $compile(contents);\n            }\n            // Re-add the compiled contents to the element.\n            compiledContents(scope, function(clone) {\n              element.append(clone);\n            });\n\n            // Call the post-linking function, if any.\n            if (link && link.post) {\n              link.post.apply(null, arguments);\n            }\n          }\n        };\n      }\n    };\n  }]);'
+
+blocks = {}
+debug_info = ''

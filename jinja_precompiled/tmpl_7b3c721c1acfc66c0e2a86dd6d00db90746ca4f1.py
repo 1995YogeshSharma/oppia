@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'components/promo/PromoBarDirective.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2017 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Directive for a promo bar that appears at the top of the\n * screen. The bar is configurable with a message and whether the promo is\n * dismissible.\n */\n\noppia.directive(\'promoBar\', [\n  \'UrlInterpolationService\', function(UrlInterpolationService) {\n    return {\n      restrict: \'E\',\n      scope: {\n        getPromoMessage: \'&promoMessage\'\n      },\n      templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(\n        \'/components/promo/\' +\n        \'promo_bar_directive.html\'),\n      controller: [\n        \'$scope\',\n        function($scope) {\n          var isPromoDismissed = function() {\n            return !!angular.fromJson(sessionStorage.promoIsDismissed);\n          };\n          var setPromoDismissed = function(promoIsDismissed) {\n            sessionStorage.promoIsDismissed = angular.toJson(promoIsDismissed);\n          };\n\n          // TODO(bhenning): Utilize cookies for tracking when a promo is\n          // dismissed. Cookies allow for a longer-lived memory of whether the\n          // promo is dismissed.\n          $scope.promoIsVisible = !isPromoDismissed();\n\n          $scope.dismissPromo = function() {\n            $scope.promoIsVisible = false;\n            setPromoDismissed(true);\n          };\n        }\n      ]\n    };\n  }]);'
+
+blocks = {}
+debug_info = ''

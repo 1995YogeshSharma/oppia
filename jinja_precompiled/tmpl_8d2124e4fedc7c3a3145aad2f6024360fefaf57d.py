@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'components/forms/schema_editors/schema_based_list_editor_directive.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<style>\n  schema-based-list-editor .oppia-delete-list-entry-button {\n    background: none;\n    border: 0;\n    color: #000;\n    cursor: pointer;\n    height: 30px;\n    opacity: 0.5;\n    width: 30px;\n  }\n  schema-based-list-editor .oppia-delete-list-entry-button {\n    margin-top: 6px;\n  }\n  schema-based-list-editor .oppia-delete-list-entry-button:hover {\n    opacity: 1;\n  }\n</style>\n\n<table style="width: 100%;">\n  <tr ng-repeat="item in localValue track by $index">\n    <td>\n      <schema-based-editor schema="itemSchema()" is-disabled="isDisabled()" local-value="localValue[$index]"\n                           label-for-focus-target="getFocusLabel($index)"\n                           on-input-blur="($last ? lastElementOnBlur : showAddItemButton)"\n                           on-input-focus="($last ? hideAddItemButton : showAddItemButton)">\n      </schema-based-editor>\n    </td>\n    <td ng-if="!len && (!minListLength || localValue.length > minListLength) && localValue.length > 0" style="vertical-align: top;">\n      <button class="oppia-delete-list-entry-button oppia-transition-200 protractor-test-delete-list-entry" type="button"\n              ng-click="deleteElement($index)"\n              ng-disabled="isDisabled()">\n        <i class="material-icons md-18">&#xE5CD;</i>\n        <span class="oppia-icon-accessibility-label">Delete this list entry</span>\n      </button>\n    </td>\n  </tr>\n</table>\n\n<div ng-if="showDuplicatesWarning && hasDuplicates()" class="oppia-form-error" aria-live="assertive">\n  Please ensure that the list has no duplicates.\n</div>\n\n<!-- The margin-left is added here to left-align the button with the previous list items. -->\n<div style="height: 30px; margin-top: 4px;">\n  <button ng-show="!isOneLineInput || isAddItemButtonPresent || (localValue.length && localValue[localValue.length - 1].length)"\n          ng-if="!len && (maxListLength === null || localValue.length < maxListLength)"\n          type="button" class="btn btn-default btn-sm protractor-test-add-list-entry" ng-click="addElement()"\n          ng-disabled="isDisabled()" style="margin-left: 0;">\n    <[addElementText]>\n  </button>\n</div>'
+
+blocks = {}
+debug_info = ''

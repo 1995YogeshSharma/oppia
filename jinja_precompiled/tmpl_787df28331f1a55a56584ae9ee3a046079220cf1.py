@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'expressions/README.txt'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'This directory contains files that are necessary to make expressions work.\nExpressions can be evaluated at runtime (i.e. when playing an Oppia exploration)\nand can reference parameters and system variables to produce textual output\n(e.g. used in a message presented to users) as well as boolean results which\nmay be used to control state transitions.\nExample string expressions:\n- "Hello " + userName + "!"\n- "The answer is " + (x + y * z) + "."\nExample boolean expressions:\n- answer == "yes"\n- loopCounter > 100\n\nSee comments in parser.pegjs for the description of input expression grammar.\nAlso see parser.pegjs for the parser output (i.e. parse tree) data format.\nSee ExpressionEvaluatorService.js for the operator contracts.\n\nFiles:\nparser.pegjs\n  This is the parser definition which is used to generate the ExpressionParserService.js file\n  that will be used at runtime to parse user-entered expressions.\nExpressionParserService.js\n  This is the JavaScript parser file produced by PEGJS and the input file\n  parser.pegjs.\nExpressionEvaluatorService.js\n  Implementation of the expression evaluator. Includes the evaluation engine\n  as well as the system operators.\nExpressionParserServiceSpec.js\n  Tests for the parser.\nExpressionEvaluatorServiceSpec.js\n  Tests for the evaluator.\n\nHow to update the parser:\n1. Modify parser.pegjs.\n2. Add tests in test.js for the new or modified grammar.\n3. Run\n\n      bash scripts/create_expression_parser.sh\n\n   which updates ExpressionParserService.js. Then run the frontend unit tests using\n\n      bash scripts/run_frontend_tests.sh\n\n   to ensure that the new grammar passes the tests in ExpressionParserServiceSpec.js and\n   ExpressionEvaluatorServiceSpec.js.\n4. Repeat 1-3 until the desired grammar is written and tested.\n5. Check the changes. You need to check in parser.pegjs as well as ExpressionParserService.js\n  (and probably ExpressionParserServiceSpec.js and ExpressionEvaluatorServiceSpec.js).'
+
+blocks = {}
+debug_info = ''

@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/exploration/AudioTranslationObjectFactory.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2017 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Factory for creating new frontend instances of\n * AudioTranslation domain objects.\n */\n\noppia.factory(\'AudioTranslationObjectFactory\', [function() {\n  var AudioTranslation = function(filename, fileSizeBytes, needsUpdate) {\n    this.filename = filename;\n    this.fileSizeBytes = fileSizeBytes;\n    this.needsUpdate = needsUpdate;\n  };\n\n  AudioTranslation.prototype.markAsNeedingUpdate = function() {\n    this.needsUpdate = true;\n  };\n\n  AudioTranslation.prototype.toggleNeedsUpdateAttribute = function() {\n    this.needsUpdate = !this.needsUpdate;\n  };\n\n  AudioTranslation.prototype.getFileSizeMB = function() {\n    var NUM_BYTES_IN_MB = 1 << 20;\n    return this.fileSizeBytes / NUM_BYTES_IN_MB;\n  };\n\n  AudioTranslation.prototype.toBackendDict = function() {\n    return {\n      filename: this.filename,\n      file_size_bytes: this.fileSizeBytes,\n      needs_update: this.needsUpdate\n    };\n  };\n\n  AudioTranslation.createNew = function(filename, fileSizeBytes) {\n    return new AudioTranslation(filename, fileSizeBytes, false);\n  };\n\n  AudioTranslation.createFromBackendDict = function(translationBackendDict) {\n    return new AudioTranslation(\n      translationBackendDict.filename,\n      translationBackendDict.file_size_bytes,\n      translationBackendDict.needs_update);\n  };\n\n  return AudioTranslation;\n}]);'
+
+blocks = {}
+debug_info = ''

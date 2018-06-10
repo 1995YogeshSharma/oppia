@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html ng-app="oppia" lang="<[currentLang]>" ng-controller="Base" itemscope itemtype="http://schema.org/Organization">
+  <head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <!-- Tiles for Internet Explorer. -->
+    <meta name="application-name" content="">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-square70x70logo" content="/assets/images/logo/msapplication-tiny.png">
+    <meta name="msapplication-square150x150logo" content="/assets/images/logo/msapplication-square.png">
+    <meta name="msapplication-wide310x150logo" content="/assets/images/logo/msapplication-wide.png">
+    <meta name="msapplication-square310x310logo" content="/assets/images/logo/msapplication-large.png">
+
+    <!-- The itemprops are for G+ sharing. -->
+    <meta itemprop="name" content="">
+    <meta itemprop="description" content="">
+    <!-- The og tags are for Facebook sharing. -->
+    <meta property="og:title" content="">
+    <meta property="og:site_name" content="Oppia">
+    <meta property="og:url" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="/assets/images/logo/288x288_logo_mint.png">
+
+    <link rel="apple-touch-icon" href="/assets/images/logo/favicon.png">
+
+    <!-- The title is bound to the rootScope. The content of the block
+    maintitle can be a string or a translation id. If it is a translation it
+    will be replaced by its translation when the page is loading. If it is a
+    string it would be displayed as is. This is the only way to translate
+    the page title because the head of the file is outside the scope of
+    any other controller. -->
+    <title itemprop="name" translate="
+  
+"></title>
+
+
+
+      <link rel="stylesheet" type="text/css" media="screen"
+      href="https://fonts.googleapis.com/css?family=Capriola|Rubik|Roboto|Material+Icons|Open+Sans:400,600">
+
+  <link rel="stylesheet" type="text/css" media="screen"
+      href="/third_party/generated/css/third_party.min.css">
+
+<link rel="stylesheet" type="text/css" media="screen"
+      href="/css/oppia.css">
+
+
+    <script>
+      var GLOBALS = {
+        ACTIVITY_STATUS_PRIVATE: JSON.parse(
+          ''),
+        ACTIVITY_STATUS_PUBLIC: JSON.parse(
+          ''),
+        ADDITIONAL_ANGULAR_MODULES: [],
+        ASSET_DIR_PREFIX: JSON.parse(''),
+        can_create_collections: JSON.parse(
+          ''),
+        csrf_token: JSON.parse(''),
+        DEV_MODE: JSON.parse(''),
+        status_code: JSON.parse(''),
+        GCS_RESOURCE_BUCKET_NAME: JSON.parse(''),
+        INVALID_NAME_CHARS: JSON.parse(''),
+        NAV_MODE: JSON.parse(''),
+        /* A list of functions to be called when an exploration is completed */
+        POST_COMPLETION_HOOKS: [],
+        preferredSiteLanguageCode: JSON.parse(
+          ''),
+        SITE_NAME: JSON.parse(''),
+        SYSTEM_USERNAMES: JSON.parse(''),
+        TEMPLATE_DIR_PREFIX: JSON.parse(''),
+        isAdmin: JSON.parse(''),
+        isModerator: JSON.parse(''),
+        isSuperAdmin: JSON.parse(''),
+        loginUrl: JSON.parse(''),
+        logoutUrl: JSON.parse(''),
+        profilePictureDataUrl: JSON.parse(''),
+        userIsLoggedIn: JSON.parse(''),
+        username: JSON.parse(''),
+        allowYamlFileUpload: JSON.parse(''),
+        PROMO_BAR_IS_ENABLED: JSON.parse(''),
+        PROMO_BAR_MESSAGE: JSON.parse('')
+      };
+
+
+    </script>
+
+
+      <script src="/assets/rich_text_components_definitions.js"></script>
+<script src="/assets/constants.js"></script>
+
+  <script src="/assets/hashes.js"></script>
+
+<!-- jquery.js, angular.js and jquery-ui.js are removed from bundled js because
+they need to be at the header. Including bundled js at the header will block
+rendering.-->
+<script src="/third_party/static/jquery-3.2.1/jquery.min.js"></script>
+<script src="/third_party/static/jqueryui-1.12.1/jquery-ui.min.js"></script>
+<script src="/third_party/static/angularjs-1.5.8/angular.min.js"></script>
+<script src="/third_party/static/jquery-ui-touch-punch-0.3.1/jquery.ui.touch-punch-improved.js"></script>
+<script src="/third_party/static/headroom-js-0.9.4/headroom.min.js"></script>
+<script src="/third_party/static/headroom-js-0.9.4/angular.headroom.min.js"></script>
+
+
+
+  </head>
+
+  <body>
+
+      <div role="button" tabindex="0" ng-click="skipToMainContent()" class="oppia-skip-to-content protractor-test-skip-link">Skip to Main Content</div>
+      <promo-bar ng-if="promoBarIsEnabled" promo-message="promoBarMessage">
+      </promo-bar>
+      <div ng-if="isBackgroundMaskActive()" class="ng-cloak oppia-background-mask">
+      </div>
+
+      <div class="oppia-base-container"
+           ng-class="{'oppia-sidebar-menu-open': isSidebarShown(), 'oppia-sidebar-menu-closed': !isSidebarShown()}"
+           ng-swipe-left="closeSidebarOnSwipe()">
+        <div class="oppia-content-container">
+          <div id="wrapper">
+            <div class="oppia-main-body">
+              <nav class="navbar navbar-default oppia-navbar oppia-prevent-selection" role="navigation" headroom tolerance="0" offset="0">
+                <div class="navbar-container">
+                  <top-navigation-bar></top-navigation-bar>
+                  <div class="collapse navbar-collapse oppia-navbar-collapse ng-cloak">
+
+
+
+
+
+                  </div>
+                </div>
+              </nav>
+
+              <div class="oppia-top-of-page-padding">
+              </div>
+
+              <div tabindex="0" aria-label="Oppia Main Content" id="oppia-main-content" class="protractor-test-main-content" ng-cloak>
+    <div class="oppia-toast-container toast-top-center">
+      <div ng-repeat="warning in (AlertsService.warnings | limitTo:5) track by $index" class="toast toast-warning oppia-toast">
+        <button type="button" class="toast-close-button" ng-click="AlertsService.deleteWarning(warning)" role="button">&times;</button>
+        <div class="toast-message">
+          <[warning.content]>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div ng-repeat="message in AlertsService.messages track by $index">
+        <alert-message message-object="message" message-index="$index"></alert-message>
+      </div>
+    </div>
+
+    <div ng-show="loadingMessage" class="oppia-loading-fullpage">
+      <div class="oppia-align-center">
+        <span translate="<[loadingMessage]>"></span>
+        <span class="oppia-loading-dot-one">.</span>
+        <span class="oppia-loading-dot-two">.</span>
+        <span class="oppia-loading-dot-three">.</span>
+      </div>
+    </div>
+    <div ng-show="!loadingMessage">
+
+  <div class="oppia-content oppia-error-page-main-content" ng-controller="Error">
+    <br>
+
+    <div class="oppia-wide-panel oppia-error-wide-container">
+      <div class="oppia-wide-panel-content protractor-test-error-container">
+        <h1 class="oppia-error-h1">
+          <div ng-if="statusCode === 400">
+            <span translate="I18N_ERROR_HEADER_400"></span>
+            - Bad Request
+          </div>
+          <div ng-if="statusCode === 401">
+            <span translate="I18N_ERROR_HEADER_401"></span>
+            - Unauthorized
+          </div>
+          <div ng-if="statusCode === 404">
+            <span translate="I18N_ERROR_HEADER_404"></span>
+            - Page Not Found
+          </div>
+          <div ng-if="statusCode === 500">
+            <span translate="I18N_ERROR_HEADER_500"></span>
+            - System Error
+          </div>
+        </h1>
+
+        <br>
+
+        <img ng-src="<[oopsMintImgUrl]>" alt="Oops!" width="299" height="142"/>
+        <p>
+          <h2 ng-if="statusCode === 400" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_400"></h2>
+          <h2 ng-if="statusCode === 401" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_401"></h2>
+          <h2 ng-if="statusCode === 404" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_404"></h2>
+          <h2 ng-if="statusCode === 500" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_500"></h2>
+        </p>
+        <p><span translate="I18N_ERROR_NEXT_STEPS" translate-values="{issueTrackerUrl: 'https://github.com/oppia/oppia/issues/new', homeUrl: '/'}"></span></p>
+      </div>
+    </div>
+  </div>
+  <style>
+    .oppia-error-h1 {
+      font-size: 1em;
+      margin: 1.33em 0;
+    }
+    .oppia-error-h2 {
+      font-size: 1.17em;
+      font-weight: 700;
+    }
+    @media screen and (min-width: 768px) {
+      .oppia-footer {
+        position: relative;
+      }
+    }
+  </style>
+
+
+  <footer class="oppia-footer" role="contentinfo">
+  <div class="oppia-footer-container">
+    <div class="row">
+      <div class="col-sm-3">
+        <h4 translate="I18N_FOOTER_ABOUT_ALL_CAPS"></h4>
+        <ul>
+          <li><a href="/about" translate="I18N_FOOTER_ABOUT"></a></li>
+          <li><a href="http://oppiafoundation.org/" translate="I18N_FOOTER_OPPIA_FOUNDATION"></a></li>
+          <li><a href="/terms" class="protractor-test-terms-link" translate="I18N_FOOTER_TERMS_OF_SERVICE"></a></li>
+          <li><a href="/privacy" class="protractor-test-privacy-policy-link" translate="I18N_FOOTER_PRIVACY_POLICY"></a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h4 translate="I18N_FOOTER_TEACH_LEARN_ALL_CAPS"></h4>
+        <ul>
+          <li><a href="/get_started" translate="I18N_FOOTER_GET_STARTED"></a></li>
+          <li><a href="/teach#playbook" translate="I18N_FOOTER_PARTICIPATION_PLAYBOOK"></a></li>
+          <li><a href="/library" translate="I18N_FOOTER_BROWSE_LIBRARY"></a></li>
+          <li><a href="/forum" translate="I18N_FOOTER_FORUM"></a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h4 translate="I18N_FOOTER_CONTRIBUTE_ALL_CAPS"></h4>
+        <ul>
+          <li><a href="http://oppiafoundation.org/get-involved/" translate="I18N_FOOTER_GET_INVOLVED"></a></li>
+          <li><a href="/teach#teach" translate="I18N_FOOTER_TEACH"></a></li>
+          <li><a href="/donate" class="protractor-test-donate-link"  translate="I18N_FOOTER_DONATE"></a></li>
+          <li><a href="/about#credits" translate="I18N_FOOTER_CREDITS"></a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h4><span translate="I18N_LANGUAGE_FOOTER_VIEW_IN"></span></h4>
+        <ul ng-controller="I18nFooter">
+          <select ng-model="currentLanguageCode"
+                  ng-change="changeLanguage()"
+                  ng-options="language.id as language.text for language in supportedSiteLanguages"
+                  class="oppia-language-selector protractor-test-i18n-language-selector"
+                  style="color: black;" aria-label="Change languages">
+          </select>
+        </ul>
+        <social-buttons></social-buttons>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+  </div>
+            </div>
+
+            <noscript>
+              <div class="oppia-page-cards-container">
+                <div class="md-default-theme oppia-page-card oppia-long-text">
+                  <!-- Note to developers: We replicate the translated text inline because, without JavaScript enabled, the translation engine doesn't kick in.-->
+                  <h2>
+                    <span translate="I18N_SPLASH_JAVASCRIPT_ERROR_TITLE">We Need JavaScript in Your Browser</span>
+                    <i class="material-icons">&#xE811;</i>
+                  </h2>
+                  <p translate="I18N_SPLASH_JAVASCRIPT_ERROR_DESCRIPTION"
+                     translate-values="{hrefUrl: 'http://www.enable-javascript.com/'}">Oppia is a free, open-source learning platform full of interactive activities called 'explorations'.  Sadly, Oppia requires JavaScript to be enabled in your web browser in order to function properly and your web browser has JavaScript disabled.  If you need help enabling JavaScript, <a href="http://www.enable-javascript.com"/>click here.</a></p>
+                  <p translate="I18N_SPLASH_JAVASCRIPT_ERROR_THANKS">Thank you.</p>
+                </div>
+              </div>
+            </noscript>
+
+            <side-navigation-bar></side-navigation-bar>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+  <script src="/third_party/generated/js/third_party.min.js"></script>
+
+
+    <script src="/app.js"></script>
+    <script src="/directives.js"></script>
+    <script src="/filters.js"></script>
+    <script src="/i18n.js"></script>
+
+    <script src="/pages/Base.js"></script>
+
+    <script src="/services/AlertsService.js"></script>
+    <script src="/services/ExplorationContextService.js"></script>
+    <script src="/services/UtilsService.js"></script>
+    <script src="/services/DebouncerService.js"></script>
+    <script src="/services/DateTimeFormatService.js"></script>
+    <script src="/services/IdGenerationService.js"></script>
+    <script src="/services/ValidatorsService.js"></script>
+    <script src="/services/HtmlEscaperService.js"></script>
+    <script src="/services/TranslationFileHashLoaderService.js"></script>
+    <script src="/services/RteHelperService.js"></script>
+    <script src="/services/StateRulesStatsService.js"></script>
+    <script src="/services/ConstructTranslationIdsService.js"></script>
+    <script src="/services/contextual/DeviceInfoService.js"></script>
+    <script src="/services/contextual/UrlService.js"></script>
+    <script src="/services/contextual/WindowDimensionsService.js"></script>
+    <script src="/services/stateful/BackgroundMaskService.js"></script>
+    <script src="/services/stateful/FocusManagerService.js"></script>
+
+    <script src="/components/alerts/AlertMessageDirective.js"></script>
+    <script src="/components/create_button/CreateActivityButtonDirective.js"></script>
+
+    <script src="/components/forms/ObjectEditorDirective.js"></script>
+    <script src="/components/promo/PromoBarDirective.js"></script>
+    <script src="/components/side_navigation_bar/SideNavigationBarDirective.js"></script>
+    <script src="/components/social_buttons/SocialButtonsDirective.js"></script>
+    <script src="/components/top_navigation_bar/TopNavigationBarDirective.js"></script>
+
+    <script src="/components/CollectionCreationService.js"></script>
+    <script src="/components/ExplorationCreationService.js"></script>
+
+    <script src="/domain/sidebar/SidebarStatusService.js"></script>
+    <script src="/domain/utilities/UrlInterpolationService.js"></script>
+
+
+
+
+  <script src="/pages/error/Error.js"></script>
+
+  </body>
+</html>

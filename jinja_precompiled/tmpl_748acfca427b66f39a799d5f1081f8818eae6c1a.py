@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/library/SearchResultsDirective.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2016 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Directive for showing search results.\n */\n\noppia.directive(\'searchResults\', [\n  \'UrlInterpolationService\', function(UrlInterpolationService) {\n    return {\n      restrict: \'E\',\n      templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(\n        \'/pages/library/search_results_directive.html\'),\n      controller: [\n        \'$scope\', \'$rootScope\', \'$timeout\', \'$window\', \'siteAnalyticsService\',\n        function($scope, $rootScope, $timeout, $window, siteAnalyticsService) {\n          $rootScope.loadingMessage = \'Loading\';\n          $scope.someResultsExist = true;\n          $scope.userIsLoggedIn = GLOBALS.userIsLoggedIn;\n\n          // Called when the first batch of search results is retrieved from the\n          // server.\n          $scope.$on(\n            \'initialSearchResultsLoaded\', function(evt, activityList) {\n              $scope.someResultsExist = activityList.length > 0;\n              $rootScope.loadingMessage = \'\';\n            }\n          );\n\n          $scope.onRedirectToLogin = function(destinationUrl) {\n            siteAnalyticsService.registerStartLoginEvent(\'noSearchResults\');\n            $timeout(function() {\n              $window.location = destinationUrl;\n            }, 150);\n            return false;\n          };\n\n          $scope.noExplorationsImgUrl =\n           UrlInterpolationService.getStaticImageUrl(\n             \'/general/no_explorations_found.png\');\n        }\n      ]\n    };\n  }]);'
+
+blocks = {}
+debug_info = ''

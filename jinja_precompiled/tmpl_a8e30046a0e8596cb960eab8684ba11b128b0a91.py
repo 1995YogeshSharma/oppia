@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/footer.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<footer class="oppia-footer" role="contentinfo">\n  <div class="oppia-footer-container">\n    <div class="row">\n      <div class="col-sm-3">\n        <h4 translate="I18N_FOOTER_ABOUT_ALL_CAPS"></h4>\n        <ul>\n          <li><a href="/about" translate="I18N_FOOTER_ABOUT"></a></li>\n          <li><a href="http://oppiafoundation.org/" translate="I18N_FOOTER_OPPIA_FOUNDATION"></a></li>\n          <li><a href="/terms" class="protractor-test-terms-link" translate="I18N_FOOTER_TERMS_OF_SERVICE"></a></li>\n          <li><a href="/privacy" class="protractor-test-privacy-policy-link" translate="I18N_FOOTER_PRIVACY_POLICY"></a></li>\n        </ul>\n      </div>\n      <div class="col-sm-3">\n        <h4 translate="I18N_FOOTER_TEACH_LEARN_ALL_CAPS"></h4>\n        <ul>\n          <li><a href="/get_started" translate="I18N_FOOTER_GET_STARTED"></a></li>\n          <li><a href="/teach#playbook" translate="I18N_FOOTER_PARTICIPATION_PLAYBOOK"></a></li>\n          <li><a href="/library" translate="I18N_FOOTER_BROWSE_LIBRARY"></a></li>\n          <li><a href="/forum" translate="I18N_FOOTER_FORUM"></a></li>\n        </ul>\n      </div>\n      <div class="col-sm-3">\n        <h4 translate="I18N_FOOTER_CONTRIBUTE_ALL_CAPS"></h4>\n        <ul>\n          <li><a href="http://oppiafoundation.org/get-involved/" translate="I18N_FOOTER_GET_INVOLVED"></a></li>\n          <li><a href="/teach#teach" translate="I18N_FOOTER_TEACH"></a></li>\n          <li><a href="/donate" class="protractor-test-donate-link"  translate="I18N_FOOTER_DONATE"></a></li>\n          <li><a href="/about#credits" translate="I18N_FOOTER_CREDITS"></a></li>\n        </ul>\n      </div>\n      <div class="col-sm-3">\n        <h4><span translate="I18N_LANGUAGE_FOOTER_VIEW_IN"></span></h4>\n        <ul ng-controller="I18nFooter">\n          <select ng-model="currentLanguageCode"\n                  ng-change="changeLanguage()"\n                  ng-options="language.id as language.text for language in supportedSiteLanguages"\n                  class="oppia-language-selector protractor-test-i18n-language-selector"\n                  style="color: black;" aria-label="Change languages">\n          </select>\n        </ul>\n        <social-buttons></social-buttons>\n      </div>\n    </div>\n  </div>\n</footer>'
+
+blocks = {}
+debug_info = ''

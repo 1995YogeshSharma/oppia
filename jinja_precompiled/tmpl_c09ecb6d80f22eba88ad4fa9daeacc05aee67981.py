@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'components/CollectionCreationService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2014 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Modal and functionality for the create collection button.\n */\n\n// TODO(bhenning): Refactor this to match the frontend design spec and reduce\n// duplicated code between CollectionCreationService and\n// ExplorationCreationService.\n\noppia.factory(\'CollectionCreationService\', [\n  \'$http\', \'$window\', \'$rootScope\', \'$timeout\', \'AlertsService\',\n  \'UrlInterpolationService\', \'siteAnalyticsService\',\n  function(\n      $http, $window, $rootScope, $timeout, AlertsService,\n      UrlInterpolationService, siteAnalyticsService) {\n    var CREATE_NEW_COLLECTION_URL_TEMPLATE = (\n      \'/collection_editor/create/<collection_id>\');\n    var collectionCreationInProgress = false;\n\n    return {\n      createNewCollection: function() {\n        if (collectionCreationInProgress) {\n          return;\n        }\n\n        collectionCreationInProgress = true;\n        AlertsService.clearWarnings();\n\n        $rootScope.loadingMessage = \'Creating collection\';\n        $http.post(\'/collection_editor_handler/create_new\', {})\n          .then(function(response) {\n            siteAnalyticsService.registerCreateNewCollectionEvent(\n              response.data.collectionId);\n            $timeout(function() {\n              $window.location = UrlInterpolationService.interpolateUrl(\n                CREATE_NEW_COLLECTION_URL_TEMPLATE, {\n                  collection_id: response.data.collectionId\n                }\n              );\n            }, 150);\n          }, function() {\n            $rootScope.loadingMessage = \'\';\n          });\n      }\n    };\n  }\n]);'
+
+blocks = {}
+debug_info = ''

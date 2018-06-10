@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/exploration_player/FatigueDetectionService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2014 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Service for detecting spamming behavior from the learner.\n */\n\noppia.factory(\'FatigueDetectionService\', [\n  \'$uibModal\', \'UrlInterpolationService\',\n  function($uibModal, UrlInterpolationService) {\n    // 4 submissions in under 10 seconds triggers modal.\n    var SPAM_COUNT_THRESHOLD = 4;\n    var SPAM_WINDOW_MSEC = 10000;\n    var submissionTimesMsec = [];\n\n    return {\n      recordSubmissionTimestamp: function() {\n        submissionTimesMsec.push((new Date()).getTime());\n      },\n      isSubmittingTooFast: function() {\n        if (submissionTimesMsec.length >= SPAM_COUNT_THRESHOLD) {\n          var windowStartTime = submissionTimesMsec.shift();\n          var windowEndTime =\n            submissionTimesMsec[submissionTimesMsec.length - 1];\n          if (windowEndTime - windowStartTime < SPAM_WINDOW_MSEC) {\n            return true;\n          }\n        }\n        return false;\n      },\n      displayTakeBreakMessage: function() {\n        $uibModal.open({\n          templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(\n            \'/pages/exploration_player/take_break_modal_directive.html\'),\n          backdrop: \'static\',\n          resolve: {},\n          controller: [\n            \'$scope\', \'$uibModalInstance\',\n            function($scope, $uibModalInstance) {\n              $scope.okay = function() {\n                $uibModalInstance.close(\'okay\');\n              };\n            }]\n        });\n      },\n      reset: function() {\n        submissionTimesMsec = [];\n      }\n    };\n  }]);'
+
+blocks = {}
+debug_info = ''
