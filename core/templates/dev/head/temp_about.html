@@ -1,3 +1,12 @@
+^^^^^^^^^^^^^^^^^^^^^^^^
+jinja_precompiled/
+
+
+FUNCTION CALLED
+
+
+
+
 <!DOCTYPE html>
 <html ng-app="oppia" lang="<[currentLang]>" ng-controller="Base" itemscope itemtype="http://schema.org/Organization">
   <head>
@@ -41,7 +50,7 @@
       href="https://fonts.googleapis.com/css?family=Capriola|Rubik|Roboto|Material+Icons|Open+Sans:400,600">
 
   <link rel="stylesheet" type="text/css" media="screen"
-      href="/third_party/generated/css/third_party.min.css">
+      href="/third_party/generated/css/third_party.css">
 
 <link rel="stylesheet" type="text/css" media="screen"
       href="/css/oppia.css">
@@ -90,8 +99,6 @@
   
       <script src="/assets/rich_text_components_definitions.js"></script>
 <script src="/assets/constants.js"></script>
-
-  <script src="/assets/hashes.js"></script>
 
 <!-- jquery.js, angular.js and jquery-ui.js are removed from bundled js because
 they need to be at the header. Including bundled js at the header will block
@@ -718,12 +725,16 @@ rendering.-->
       </div>
 
       
+        <div class="oppia-dev-mode">
+          Dev Mode
+        </div>
+      
 
       
     
 
     
-  <script src="/third_party/generated/js/third_party.min.js"></script>
+  <script src="/third_party/generated/js/third_party.js"></script>
 
 
     <script src="/app.js"></script>
