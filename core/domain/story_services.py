@@ -196,6 +196,26 @@ def get_story_summary_by_id(story_id, strict=True):
         return None
 
 
+def get_story_summaries_by_ids(story_ids):
+    """Returns the StorySummary objects corresponding the given story ids.
+
+    Args:
+        story_ids: list(str). The list of story ids for which the story
+            summaries are to be found.
+
+    Returns:
+        list(StorySummary). The story summaries corresponding to given story
+            ids.
+    """
+    story_summary_models = story_models.StorySummaryModel.get_multi(story_ids)
+    story_summaries = [
+        get_story_summary_from_model(story_summary_model)
+        for story_summary_model in story_summary_models
+        if story_summary_model is not None
+    ]
+    return story_summaries
+
+
 def get_new_story_id():
     """Returns a new story id.
 
@@ -292,6 +312,8 @@ def apply_change_list(story_id, change_list):
                       story_domain.STORY_NODE_PROPERTY_EXPLORATION_ID):
                     story.update_node_exploration_id(
                         change.node_id, change.new_value)
+                else:
+                    raise Exception('Invalid change dict.')
             elif change.cmd == story_domain.CMD_UPDATE_STORY_PROPERTY:
                 if (change.property_name ==
                         story_domain.STORY_PROPERTY_TITLE):
@@ -305,10 +327,14 @@ def apply_change_list(story_id, change_list):
                 elif (change.property_name ==
                       story_domain.STORY_PROPERTY_LANGUAGE_CODE):
                     story.update_language_code(change.new_value)
+                else:
+                    raise Exception('Invalid change dict.')
             elif change.cmd == story_domain.CMD_UPDATE_STORY_CONTENTS_PROPERTY:
                 if (change.property_name ==
                         story_domain.INITIAL_NODE_ID):
                     story.update_initial_node(change.new_value)
+                else:
+                    raise Exception('Invalid change dict.')
             elif (
                     change.cmd ==
                     story_domain.CMD_MIGRATE_SCHEMA_TO_LATEST_VERSION):
@@ -317,6 +343,8 @@ def apply_change_list(story_id, change_list):
                 # latest schema version. As a result, simply resaving the
                 # story is sufficient to apply the schema migration.
                 continue
+            else:
+                raise Exception('Invalid change dict.')
         return story
 
     except Exception as e:

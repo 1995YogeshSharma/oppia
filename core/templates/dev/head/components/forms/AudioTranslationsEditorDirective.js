@@ -22,39 +22,44 @@ oppia.directive('audioTranslationsEditor', [
       restrict: 'E',
       scope: {
         componentName: '@',
-        subtitledHtml: '=',
+        contentId: '=',
         // A function that must be called at the outset of every attempt to
         // edit, even if the action is not subsequently taken through to
         // completion.
-        getOnStartEditFn: '&onStartEdit',
-        // A function that must be called on completion of an action which
-        // changes the audio translation data in a persistent way.
-        getOnChangeFn: '&onChange'
+        getOnStartEditFn: '&onStartEdit'
       },
       templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(
         '/components/forms/audio_translations_editor_directive.html'),
       controller: [
-        '$scope', '$uibModal', '$sce', 'stateContentService',
+        '$scope', '$rootScope', '$uibModal', '$sce', 'stateContentService',
+        'stateContentIdsToAudioTranslationsService',
         'EditabilityService', 'LanguageUtilService', 'AlertsService',
-        'ExplorationContextService', 'AssetsBackendApiService',
+        'ContextService', 'AssetsBackendApiService',
         function(
-            $scope, $uibModal, $sce, stateContentService, EditabilityService,
-            LanguageUtilService, AlertsService, ExplorationContextService,
-            AssetsBackendApiService) {
-          $scope.isEditable = EditabilityService.isEditable;
+            $scope, $rootScope, $uibModal, $sce, stateContentService,
+            stateContentIdsToAudioTranslationsService,
+            EditabilityService, LanguageUtilService, AlertsService,
+            ContextService, AssetsBackendApiService) {
+          $scope.isTranslatable = EditabilityService.isTranslatable;
 
+          $scope.stateContentIdsToAudioTranslationsService =
+              stateContentIdsToAudioTranslationsService;
           // The following if-condition is present because, sometimes,
           // Travis-CI throws an error of the form "Cannot read property
           // getBindableAudioTranslations of undefined". It looks like there is
           // a race condition that is causing this directive to get
           // initialized when it shouldn't. This is hard to reproduce
           // deterministically, hence this guard.
-          if ($scope.subtitledHtml) {
+          if (stateContentIdsToAudioTranslationsService.displayed) {
             $scope.audioTranslations = (
-              $scope.subtitledHtml.getBindableAudioTranslations());
+              stateContentIdsToAudioTranslationsService.displayed
+                .getBindableAudioTranslations($scope.contentId));
+            $scope.hasAudioTranslations =
+              stateContentIdsToAudioTranslationsService.displayed
+                .hasAudioTranslations($scope.contentId);
           }
 
-          var explorationId = ExplorationContextService.getExplorationId();
+          var explorationId = ContextService.getExplorationId();
 
           $scope.getAudioLanguageDescription = (
             LanguageUtilService.getAudioLanguageDescription);
@@ -65,16 +70,35 @@ oppia.directive('audioTranslationsEditor', [
                 explorationId, filename));
           };
 
+          $scope.isFullyTranslated = function() {
+            stateContentIdsToAudioTranslationsService.displayed
+              .isFullyTranslated($scope.contentId);
+          };
+
+          $scope.getNeedsUpdateTooltipMessage = function(needsUpdate) {
+            if (needsUpdate) {
+              return ($scope.isTranslatable() ? 'Audio might not match text.' +
+                ' Reupload the file, or click to unflag.' :
+                'Audio might not match text.');
+            } else {
+              return ($scope.isTranslatable() ? 'Click to mark this audio ' +
+                'translation as not matching text.' :
+                'Audio translation matches text.');
+            }
+          };
+
           $scope.toggleNeedsUpdateAttribute = function(languageCode) {
             $scope.getOnStartEditFn()();
-            $scope.subtitledHtml.toggleNeedsUpdateAttribute(languageCode);
-            $scope.getOnChangeFn()();
+            stateContentIdsToAudioTranslationsService.displayed
+              .toggleNeedsUpdateAttribute($scope.contentId, languageCode);
+            stateContentIdsToAudioTranslationsService.saveDisplayedValue();
           };
 
           $scope.openAddAudioTranslationModal = function() {
             var allowedAudioLanguageCodes = (
               LanguageUtilService.getComplementAudioLanguageCodes(
-                $scope.subtitledHtml.getAudioLanguageCodes()));
+                stateContentIdsToAudioTranslationsService.displayed
+                  .getAudioLanguageCodes($scope.contentId)));
 
             if (allowedAudioLanguageCodes.length === 0) {
               AlertsService.addWarning(
@@ -100,12 +124,12 @@ oppia.directive('audioTranslationsEditor', [
               controller: [
                 '$scope', '$window', '$uibModalInstance', 'LanguageUtilService',
                 'allowedAudioLanguageCodes', 'AlertsService',
-                'ExplorationContextService', 'IdGenerationService',
+                'ContextService', 'IdGenerationService',
                 'componentName',
                 function(
                     $scope, $window, $uibModalInstance, LanguageUtilService,
                     allowedAudioLanguageCodes, AlertsService,
-                    ExplorationContextService, IdGenerationService,
+                    ContextService, IdGenerationService,
                     componentName) {
                   var ERROR_MESSAGE_BAD_FILE_UPLOAD = (
                     'There was an error uploading the audio file.');
@@ -130,7 +154,7 @@ oppia.directive('audioTranslationsEditor', [
                   $scope.saveInProgress = false;
                   $scope.languageCode =
                     allowedAudioLanguageCodes.indexOf(prevLanguageCode) !== -1 ?
-                      prevLanguageCode : allowedAudioLanguageCodes[0];
+                    prevLanguageCode : allowedAudioLanguageCodes[0];
                   var uploadedFile = null;
 
                   $scope.isAudioTranslationValid = function() {
@@ -166,7 +190,7 @@ oppia.directive('audioTranslationsEditor', [
                       $window.localStorage.setItem(
                         'last_uploaded_audio_lang', $scope.languageCode);
                       var explorationId = (
-                        ExplorationContextService.getExplorationId());
+                        ContextService.getExplorationId());
                       AssetsBackendApiService.saveAudio(
                         explorationId, generatedFilename, uploadedFile
                       ).then(function() {
@@ -192,9 +216,11 @@ oppia.directive('audioTranslationsEditor', [
                 }
               ]
             }).result.then(function(result) {
-              $scope.subtitledHtml.addAudioTranslation(
-                result.languageCode, result.filename, result.fileSizeBytes);
-              $scope.getOnChangeFn()();
+              stateContentIdsToAudioTranslationsService.displayed
+                .addAudioTranslation(
+                  $scope.contentId, result.languageCode, result.filename,
+                  result.fileSizeBytes);
+              stateContentIdsToAudioTranslationsService.saveDisplayedValue();
             });
           };
 
@@ -232,8 +258,9 @@ oppia.directive('audioTranslationsEditor', [
                 }
               ]
             }).result.then(function(result) {
-              $scope.subtitledHtml.deleteAudioTranslation(languageCode);
-              $scope.getOnChangeFn()();
+              stateContentIdsToAudioTranslationsService.displayed
+                .deleteAudioTranslation($scope.contentId, languageCode);
+              stateContentIdsToAudioTranslationsService.saveDisplayedValue();
             });
           };
         }

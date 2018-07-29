@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-
 import os
 import re
 import sys
@@ -177,13 +174,13 @@ class GoogleDocstring(_check_docs_utils.GoogleDocstring):
         \s*  (.*)                       # beginning of optional description
     '''.format(
         type=re_multiple_type,
-    ), re.X | re.S | re.M)
+    ), flags=re.X | re.S | re.M)
 
     re_returns_line = re.compile(r'''
         \s* (({type}|\S*).)?              # identifier
         \s* (.*)                          # beginning of description
     '''.format(
         type=re_multiple_type,
-    ), re.X | re.S | re.M)
+    ), flags=re.X | re.S | re.M)
 
     re_yields_line = re_returns_line

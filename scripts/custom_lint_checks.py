@@ -14,65 +14,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import astroid
-import docstrings_checker
+import docstrings_checker  # pylint: disable=relative-import
 
-from pylint.checkers import BaseChecker
+from pylint import checkers
+from pylint import interfaces
+from pylint.checkers import typecheck
 from pylint.checkers import utils as checker_utils
-from pylint.interfaces import IAstroidChecker
-from pylint.interfaces import IRawChecker
 
 
-class ExplicitKwargsChecker(BaseChecker):
+class ExplicitKeywordArgsChecker(checkers.BaseChecker):
     """Custom pylint checker which checks for explicit keyword arguments
     in any function call.
     """
-    __implements__ = IAstroidChecker
+    __implements__ = interfaces.IAstroidChecker
 
-    name = 'explicit-kwargs'
+    name = 'explicit-keyword-args'
     priority = -1
     msgs = {
         'C0001': (
-            'Keyword argument(s) should be named explicitly in function call.',
-            'non-explicit-kwargs',
+            'Keyword argument %s should be named explicitly in %s call of %s.',
+            'non-explicit-keyword-args',
             'All keyword arguments should be explicitly named in function call.'
         ),
     }
-
-    def __init__(self, linter=None):
-        """Constructs an ExplicitKwargsChecker object.
-
-        Args:
-            linter: Pylinter. An object implementing Pylinter.
-        """
-        super(ExplicitKwargsChecker, self).__init__(linter)
-        self._function_name = None
-        self._defaults_count = 0
-        self._positional_arguments_count = 0
-
-    def visit_functiondef(self, node):
-        """Visits each function definition in a lint check.
-
-        Args:
-            node. FunctionDef. The current function definition node.
-        """
-        self._function_name = node.name
-
-    def visit_arguments(self, node):
-        """Visits each function argument in a lint check.
-
-        Args:
-            node. Arguments. The current function arguments node.
-        """
-        if node.defaults is not None:
-            self._defaults_count = len(node.defaults)
-            if node.args is not None:
-                self._positional_arguments_count = (
-                    len(node.args) - len(node.defaults))
 
     def visit_call(self, node):
         """Visits each function call in a lint check.
@@ -80,18 +45,97 @@ class ExplicitKwargsChecker(BaseChecker):
         Args:
             node. Call. The current function call node.
         """
-        if (isinstance(node.func, astroid.Name)) and (
-                node.func.name == self._function_name):
-            if (node.args is not None) and (
-                    len(node.args) > self._positional_arguments_count):
-                self.add_message('non-explicit-kwargs', node=node)
+        called = checker_utils.safe_infer(node.func)
+
+        try:
+            # For the rationale behind the Pylint pragma below,
+            # see https://stackoverflow.com/a/35701863/8115428
+            called, implicit_args, callable_name = (
+                typecheck._determine_callable(called))  # pylint: disable=protected-access
+        except ValueError:
+            return
+
+        if called.args.args is None:
+            # Built-in functions have no argument information.
+            return
+
+        if len(called.argnames()) != len(set(called.argnames())):
+            return
+
+        # Build the set of keyword arguments and count the positional arguments.
+        call_site = astroid.arguments.CallSite.from_call(node)
+        if call_site.has_invalid_arguments() or (
+                call_site.has_invalid_keywords()):
+            return
+
+        num_positional_args = len(call_site.positional_arguments)
+        keyword_args = list(call_site.keyword_arguments.keys())
+
+        already_filled_positionals = getattr(called, 'filled_positionals', 0)
+        already_filled_keywords = getattr(called, 'filled_keywords', {})
+
+        keyword_args += list(already_filled_keywords)
+        num_positional_args += already_filled_positionals
+        num_positional_args += implicit_args
+
+        # Analyze the list of formal parameters.
+        num_mandatory_parameters = len(called.args.args) - len(
+            called.args.defaults)
+
+        parameters = []
+        parameter_name_to_index = {}
+        for i, arg in enumerate(called.args.args):
+            if isinstance(arg, astroid.Tuple):
+                name = None
+            else:
+                assert isinstance(arg, astroid.AssignName)
+                name = arg.name
+                parameter_name_to_index[name] = i
+            if i >= num_mandatory_parameters:
+                defval = called.args.defaults[i - num_mandatory_parameters]
+            else:
+                defval = None
+            parameters.append([(name, defval), False])
+
+        num_positional_args_unused = num_positional_args
+        # Check that all parameters with a default value have
+        # been called explicitly.
+        for [(name, defval), _] in parameters:
+            if defval:
+                if name is None:
+                    display_name = '<tuple>'
+                else:
+                    display_name = repr(name)
+
+                if name not in keyword_args and (
+                        num_positional_args_unused > (
+                            num_mandatory_parameters)) and (
+                                callable_name != 'constructor'):
+                    # This try/except block tries to get the function
+                    # name. Since each node may differ, multiple
+                    # blocks have been used.
+                    try:
+                        func_name = node.func.attrname
+                    except AttributeError:
+                        try:
+                            func_name = node.func.name
+                        except AttributeError:
+                            func_name = node.func
+
+                    self.add_message(
+                        'non-explicit-keyword-args', node=node,
+                        args=(
+                            display_name,
+                            callable_name,
+                            func_name))
+                    num_positional_args_unused -= 1
 
 
-class HangingIndentChecker(BaseChecker):
+class HangingIndentChecker(checkers.BaseChecker):
     """Custom pylint checker which checks for break after parenthesis in case
     of hanging indentation.
     """
-    __implements__ = IRawChecker
+    __implements__ = interfaces.IRawChecker
 
     name = 'hanging-indent'
     priority = -1
@@ -151,7 +195,7 @@ class HangingIndentChecker(BaseChecker):
 
 # The following class was derived from
 # https://github.com/PyCQA/pylint/blob/377cc42f9e3116ff97cddd4567d53e9a3e24ebf9/pylint/extensions/docparams.py#L26
-class DocstringParameterChecker(BaseChecker):
+class DocstringParameterChecker(checkers.BaseChecker):
     """Checker for Sphinx, Google, or Numpy style docstrings
 
     * Check that all function, method and constructor parameters are mentioned
@@ -168,7 +212,7 @@ class DocstringParameterChecker(BaseChecker):
     Args:
         linter: Pylinter. The linter object.
     """
-    __implements__ = IAstroidChecker
+    __implements__ = interfaces.IAstroidChecker
 
     name = 'parameter_documentation'
     msgs = {
@@ -300,10 +344,12 @@ class DocstringParameterChecker(BaseChecker):
                 )
 
                 self.check_arguments_in_docstring(
-                    class_doc, node.args, class_node, class_allow_no_param)
+                    class_doc, node.args, class_node,
+                    accept_no_param_doc=class_allow_no_param)
 
         self.check_arguments_in_docstring(
-            node_doc, node.args, node, node_allow_no_param)
+            node_doc, node.args, node,
+            accept_no_param_doc=node_allow_no_param)
 
     def check_functiondef_returns(self, node, node_doc):
         """Checks whether a function documented with a return value actually has
@@ -623,12 +669,65 @@ class DocstringParameterChecker(BaseChecker):
             node=node)
 
 
+class ImportOnlyModulesChecker(checkers.BaseChecker):
+    """Checker for import-from statements. It checks that
+    modules are only imported.
+    """
+
+    __implements__ = interfaces.IAstroidChecker
+
+    name = 'import-only-modules'
+    priority = -1
+    msgs = {
+        'C0003': (
+            'Import \"%s\" from \"%s\" is not a module.',
+            'import-only-modules',
+            'Modules should only be imported.',
+        ),
+    }
+
+    @checker_utils.check_messages('import-only-modules')
+    def visit_importfrom(self, node):
+        """Visits all import-from statements in a python file and checks that
+        modules are imported. It then adds a message accordingly.
+
+        Args:
+            node. astroid.scoped_nodes.Function. Node for a function or method
+                definition in AST
+        """
+
+        try:
+            imported_module = node.do_import_module(node.modname)
+        except astroid.AstroidBuildingException:
+            return
+
+        if node.level is None:
+            modname = node.modname
+        else:
+            modname = '.' * node.level + node.modname
+
+        for (name, _) in node.names:
+            if name == 'constants':
+                continue
+            try:
+                imported_module.import_module(name, True)
+            except astroid.AstroidImportError:
+                self.add_message(
+                    'import-only-modules',
+                    node=node,
+                    args=(name, modname),
+                )
+            except astroid.AstroidBuildingException:
+                pass
+
+
 def register(linter):
     """Registers the checker with pylint.
 
     Args:
         linter: Pylinter. The Pylinter object.
     """
-    linter.register_checker(ExplicitKwargsChecker(linter))
+    linter.register_checker(ExplicitKeywordArgsChecker(linter))
     linter.register_checker(HangingIndentChecker(linter))
     linter.register_checker(DocstringParameterChecker(linter))
+    linter.register_checker(ImportOnlyModulesChecker(linter))

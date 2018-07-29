@@ -20,10 +20,12 @@ oppia.controller('StateEditor', [
   '$scope', '$rootScope', 'EditorStateService', 'ExplorationStatesService',
   'INTERACTION_SPECS', 'ExplorationAdvancedFeaturesService',
   'UrlInterpolationService', 'stateContentService',
+  'stateContentIdsToAudioTranslationsService',
   function(
       $scope, $rootScope, EditorStateService, ExplorationStatesService,
       INTERACTION_SPECS, ExplorationAdvancedFeaturesService,
-      UrlInterpolationService, stateContentService) {
+      UrlInterpolationService, stateContentService,
+      stateContentIdsToAudioTranslationsService) {
     $scope.areParametersEnabled = (
       ExplorationAdvancedFeaturesService.areParametersEnabled);
 
@@ -54,6 +56,9 @@ oppia.controller('StateEditor', [
       if (stateName && stateData) {
         stateContentService.init(
           EditorStateService.getActiveStateName(), stateData.content);
+        stateContentIdsToAudioTranslationsService.init(
+          EditorStateService.getActiveStateName(),
+          stateData.contentIdsToAudioTranslations);
 
         $rootScope.$broadcast('stateEditorInitialized', stateData);
         var interactionId = ExplorationStatesService.getInteractionIdMemento(
@@ -90,8 +95,6 @@ oppia.directive('trainingPanel', [
       restrict: 'E',
       scope: {
         answer: '=',
-        answerFeedback: '=',
-        answerOutcomeDest: '=',
         // The classification input is an object with two keys:
         //   -answerGroupIndex: This refers to which answer group the answer
         //      being trained has been classified to (for displaying feedback
@@ -104,7 +107,8 @@ oppia.directive('trainingPanel', [
         //      non-null if, and only if, the creator has specified that a new
         //      response should be created for the trained answer.
         classification: '=',
-        onFinishTraining: '&'
+        onFinishTraining: '&',
+        addingNewResponse: '='
       },
       templateUrl: UrlInterpolationService.getDirectiveTemplateUrl(
         '/pages/exploration_editor/editor_tab/' +
@@ -114,13 +118,17 @@ oppia.directive('trainingPanel', [
         'EditorStateService', 'ExplorationStatesService',
         'TrainingDataService', 'ResponsesService', 'stateInteractionIdService',
         'stateCustomizationArgsService', 'AnswerGroupObjectFactory',
-        'OutcomeObjectFactory',
-        function($scope, ExplorationHtmlFormatterService,
+        'OutcomeObjectFactory', 'GenerateContentIdService',
+        'COMPONENT_NAME_FEEDBACK',
+        'stateContentIdsToAudioTranslationsService',
+        function(
+            $scope, ExplorationHtmlFormatterService,
             EditorStateService, ExplorationStatesService,
             TrainingDataService, ResponsesService, stateInteractionIdService,
             stateCustomizationArgsService, AnswerGroupObjectFactory,
-            OutcomeObjectFactory) {
-          $scope.changingAnswerGroupIndex = false;
+            OutcomeObjectFactory, GenerateContentIdService,
+            COMPONENT_NAME_FEEDBACK,
+            stateContentIdsToAudioTranslationsService) {
           $scope.addingNewResponse = false;
 
           var _stateName = EditorStateService.getActiveStateName();
@@ -137,47 +145,41 @@ oppia.directive('trainingPanel', [
 
           $scope.$watch('answer', _updateAnswerTemplate);
           _updateAnswerTemplate();
+          $scope.selectedAnswerGroupIndex = (
+            $scope.classification.answerGroupIndex);
 
           $scope.getCurrentStateName = function() {
             return EditorStateService.getActiveStateName();
           };
 
-          $scope.beginChangingAnswerGroupIndex = function() {
-            $scope.changingAnswerGroupIndex = true;
-          };
-
           $scope.beginAddingNewResponse = function() {
+            var contentId = GenerateContentIdService.getNextId(
+              COMPONENT_NAME_FEEDBACK);
             $scope.classification.newOutcome = OutcomeObjectFactory.createNew(
-              EditorStateService.getActiveStateName(), '', []);
+              EditorStateService.getActiveStateName(), contentId, '', []);
             $scope.addingNewResponse = true;
           };
 
-          $scope.confirmAnswerGroupIndex = function(index) {
-            $scope.classification.answerGroupIndex = index;
-
-            if (index === ResponsesService.getAnswerGroupCount()) {
-              TrainingDataService.trainDefaultResponse($scope.answer);
-            } else {
-              TrainingDataService.trainAnswerGroup(index, $scope.answer);
-            }
-
-            $scope.onFinishTraining();
+          $scope.cancelAddingNewResponse = function() {
+            $scope.addingNewResponse = false;
+            $scope.classification.newOutcome = null;
           };
+
+          $scope.selectAnswerGroupIndex = function(index) {
+            $scope.selectedAnswerGroupIndex = index;
+            $scope.classification.answerGroupIndex = index;
+            if (index > ResponsesService.getAnswerGroupCount()) {
+              $scope.classification.newOutcome = $scope.allOutcomes[index];
+            }
+          };
+
           $scope.confirmNewFeedback = function() {
             if ($scope.classification.newOutcome) {
-              // Create a new answer group with the given feedback.
-              var answerGroups = ResponsesService.getAnswerGroups();
-              answerGroups.push(AnswerGroupObjectFactory.createNew(
-                [], angular.copy($scope.classification.newOutcome), [], null));
-              ResponsesService.save(
-                answerGroups, ResponsesService.getDefaultOutcome());
-
-              // Train the group with the answer.
-              var index = ResponsesService.getAnswerGroupCount() - 1;
-              TrainingDataService.trainAnswerGroup(index, $scope.answer);
+              // Push the new outcome at the end of the existing outcomes.
+              $scope.allOutcomes.push($scope.classification.newOutcome);
+              $scope.selectAnswerGroupIndex($scope.allOutcomes.length - 1);
+              $scope.addingNewResponse = false;
             }
-
-            $scope.onFinishTraining();
           };
         }
       ]

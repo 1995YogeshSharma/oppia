@@ -23,7 +23,6 @@
  * in an e2e test.
  */
 
-var editor = require('../protractor_utils/editor.js');
 var forms = require('../protractor_utils/forms.js');
 var general = require('../protractor_utils/general.js');
 var users = require('../protractor_utils/users.js');
@@ -31,15 +30,22 @@ var workflow = require('../protractor_utils/workflow.js');
 
 var CreatorDashboardPage =
   require('../protractor_utils/CreatorDashboardPage.js');
+var ExplorationEditorPage =
+  require('../protractor_utils/ExplorationEditorPage.js');
 var ExplorationPlayerPage =
   require('../protractor_utils/ExplorationPlayerPage.js');
 var LibraryPage = require('../protractor_utils/LibraryPage.js');
 
 
 describe('Exploration history', function() {
+  var explorationEditorPage = null;
   var explorationPlayerPage = null;
-
+  var explorationEditorHistoryTab = null;
+  var explorationEditorMainTab = null;
   beforeEach(function() {
+    explorationEditorPage = new ExplorationEditorPage.ExplorationEditorPage();
+    explorationEditorHistoryTab = explorationEditorPage.getHistoryTab();
+    explorationEditorMainTab = explorationEditorPage.getMainTab();
     explorationPlayerPage = new ExplorationPlayerPage.ExplorationPlayerPage();
   });
 
@@ -48,28 +54,31 @@ describe('Exploration history', function() {
     users.login('user@historyTab.com');
     workflow.createExploration();
 
-    // Constants for colors of nodes in history graph
+    // Constants for colors of nodes in history graph.
     var COLOR_ADDED = 'rgb(78, 162, 78)';
     var COLOR_DELETED = 'rgb(220, 20, 60)';
     var COLOR_CHANGED = 'rgb(30, 144, 255)';
     var COLOR_UNCHANGED = 'rgb(245, 245, 220)';
     var COLOR_RENAMED_UNCHANGED = 'rgb(255, 215, 0)';
 
-    // Check renaming state, editing text, editing interactions and adding state
-    editor.setStateName('first');
-    editor.setContent(forms.toRichText('enter 6 to continue'));
-    editor.setInteraction('NumericInput');
-    editor.addResponse('NumericInput', null, 'second', true, 'Equals', 6);
-    editor.moveToState('second');
-    editor.setContent(forms.toRichText('this is card 2'));
-    editor.setInteraction('Continue');
-    editor.setDefaultOutcome(null, 'final card', true);
-
-    // Setup a terminating state
-    editor.moveToState('final card');
-    editor.setInteraction('EndExploration');
-    editor.moveToState('first');
-    editor.saveChanges();
+    // Check renaming state, editing text, editing interactions and adding
+    // state.
+    explorationEditorMainTab.setStateName('first');
+    explorationEditorMainTab.setContent(forms.toRichText(
+      'enter 6 to continue'));
+    explorationEditorMainTab.setInteraction('NumericInput');
+    explorationEditorMainTab.addResponse(
+      'NumericInput', null, 'second', true, 'Equals', 6);
+    explorationEditorMainTab.moveToState('second');
+    explorationEditorMainTab.setContent(forms.toRichText('this is card 2'));
+    explorationEditorMainTab.setInteraction('Continue');
+    var responseEditor = explorationEditorMainTab.getResponseEditor('default');
+    responseEditor.setDestination('final card', true, null);
+    // Setup a terminating state.
+    explorationEditorMainTab.moveToState('final card');
+    explorationEditorMainTab.setInteraction('EndExploration');
+    explorationEditorMainTab.moveToState('first');
+    explorationEditorPage.saveChanges();
 
     var VERSION_1_STATE_1_CONTENTS = {
       1: {
@@ -81,142 +90,166 @@ describe('Exploration history', function() {
         highlighted: false
       },
       3: {
-        text: '  audio_translations: {}',
+        text: '  content_id: content',
         highlighted: false
       },
       4: {
-        text: '  html: <p>enter 6 to continue</p>',
+        text: '  html: \'<p>enter 6 to continue</p>',
         highlighted: true
       },
       5: {
-        text: 'interaction:',
-        highlighted: false
+        text: ' ',
+        highlighted: true
       },
       6: {
-        text: '  answer_groups:',
+        text: '    \'',
         highlighted: true
       },
       7: {
-        text: '  - outcome:',
-        highlighted: true
+        text: 'content_ids_to_audio_translations:',
+        highlighted: false
       },
       8: {
-        text: '      dest: second',
-        highlighted: true
+        text: '  content: {}',
+        highlighted: false
       },
       9: {
-        text: '      feedback:',
-        highlighted: true
+        text: '  default_outcome: {}',
+        highlighted: false
       },
       10: {
-        text: '        audio_translations: {}',
+        text: '  feedback_1: {}',
         highlighted: true
       },
       11: {
-        text: '        html: \'\'',
-        highlighted: true
+        text: 'interaction:',
+        highlighted: false
       },
       12: {
-        text: '      labelled_as_correct: false',
+        text: '  answer_groups:',
         highlighted: true
       },
       13: {
-        text: '      missing_prerequisite_skill_id: null',
+        text: '  - outcome:',
         highlighted: true
       },
       14: {
-        text: '      param_changes: []',
+        text: '      dest: second',
         highlighted: true
       },
       15: {
-        text: '      refresher_exploration_id: null',
+        text: '      feedback:',
         highlighted: true
       },
       16: {
-        text: '    rule_specs:',
+        text: '        content_id: feedback_1',
         highlighted: true
       },
       17: {
-        text: '    - inputs:',
+        text: '        html: \'\'',
         highlighted: true
       },
       18: {
-        text: '        x: 6',
+        text: '      labelled_as_correct: false',
         highlighted: true
       },
       19: {
-        text: '      rule_type: Equals',
+        text: '      missing_prerequisite_skill_id: null',
         highlighted: true
       },
       20: {
-        text: '    tagged_misconception_id: null',
+        text: '      param_changes: []',
         highlighted: true
       },
       21: {
-        text: '    training_data: []',
+        text: '      refresher_exploration_id: null',
         highlighted: true
       },
       22: {
-        text: '  confirmed_unclassified_answers: []',
-        highlighted: false
+        text: '    rule_specs:',
+        highlighted: true
       },
       23: {
-        text: '  customization_args: {}',
-        highlighted: false
+        text: '    - inputs:',
+        highlighted: true
       },
       24: {
-        text: '  default_outcome:',
-        highlighted: false
+        text: '        x: 6',
+        highlighted: true
       },
       25: {
-        text: '    dest: first',
+        text: '      rule_type: Equals',
         highlighted: true
       },
       26: {
-        text: '    feedback:',
-        highlighted: false
+        text: '    tagged_misconception_id: null',
+        highlighted: true
       },
       27: {
-        text: '      audio_translations: {}',
-        highlighted: false
+        text: '    training_data: []',
+        highlighted: true
       },
       28: {
-        text: '      html: \'\'',
+        text: '  confirmed_unclassified_answers: []',
         highlighted: false
       },
       29: {
-        text: '    labelled_as_correct: false',
+        text: '  customization_args: {}',
         highlighted: false
       },
       30: {
-        text: '    missing_prerequisite_skill_id: null',
+        text: '  default_outcome:',
         highlighted: false
       },
       31: {
-        text: '    param_changes: []',
-        highlighted: false
+        text: '    dest: first',
+        highlighted: true
       },
       32: {
-        text: '    refresher_exploration_id: null',
+        text: '    feedback:',
         highlighted: false
       },
       33: {
-        text: '  hints: []',
+        text: '      content_id: default_outcome',
         highlighted: false
       },
       34: {
-        text: '  id: NumericInput',
-        highlighted: true
+        text: '      html: \'\'',
+        highlighted: false
       },
       35: {
-        text: '  solution: null',
+        text: '    labelled_as_correct: false',
         highlighted: false
       },
       36: {
-        text: 'param_changes: []',
+        text: '    missing_prerequisite_skill_id: null',
         highlighted: false
       },
       37: {
+        text: '    param_changes: []',
+        highlighted: false
+      },
+      38: {
+        text: '    refresher_exploration_id: null',
+        highlighted: false
+      },
+      39: {
+        text: '  hints: []',
+        highlighted: false
+      },
+      40: {
+        text: '  id: NumericInput',
+        highlighted: true
+      },
+      41: {
+        text: '  solution: null',
+        highlighted: false
+      },
+      42: {
+        text: 'param_changes: []',
+        highlighted: false
+      },
+      43: {
         text: ' ',
         highlighted: false
       }
@@ -232,7 +265,7 @@ describe('Exploration history', function() {
         highlighted: false
       },
       3: {
-        text: '  audio_translations: {}',
+        text: '  content_id: content',
         highlighted: false
       },
       4: {
@@ -240,76 +273,88 @@ describe('Exploration history', function() {
         highlighted: true
       },
       5: {
-        text: 'interaction:',
+        text: 'content_ids_to_audio_translations:',
         highlighted: false
       },
       6: {
-        text: '  answer_groups: []',
-        highlighted: true
-      },
-      7: {
-        text: '  confirmed_unclassified_answers: []',
+        text: '  content: {}',
         highlighted: false
       },
+      7: {
+        text: '  default_outcome: {}',
+        highlighted: true
+      },
       8: {
-        text: '  customization_args: {}',
+        text: 'interaction:',
         highlighted: false
       },
       9: {
+        text: '  answer_groups: []',
+        highlighted: true
+      },
+      10: {
+        text: '  confirmed_unclassified_answers: []',
+        highlighted: false
+      },
+      11: {
+        text: '  customization_args: {}',
+        highlighted: false
+      },
+      12: {
         text: '  default_outcome:',
         highlighted: false
       },
       // Note that highlighting *underneath* a line is still considered a
       // highlight.
-      10: {
+      13: {
         text: '    dest: ' + general.FIRST_STATE_DEFAULT_NAME,
         highlighted: true
       },
-      11: {
+      14: {
         text: '    feedback:',
         highlighted: false
       },
-      12: {
-        text: '      audio_translations: {}',
-        highlighted: false
-      },
-      13: {
-        text: '      html: \'\'',
-        highlighted: false
-      },
-      14: {
-        text: '    labelled_as_correct: false',
-        highlighted: false
-      },
       15: {
-        text: '    missing_prerequisite_skill_id: null',
+        text: '      content_id: default_outcome',
         highlighted: false
       },
       16: {
-        text: '    param_changes: []',
+        text: '      html: \'\'',
         highlighted: false
       },
       17: {
-        text: '    refresher_exploration_id: null',
+        text: '    labelled_as_correct: false',
         highlighted: false
       },
       18: {
-        text: '  hints: []',
+        text: '    missing_prerequisite_skill_id: null',
         highlighted: false
       },
       19: {
-        text: '  id: null',
-        highlighted: true
+        text: '    param_changes: []',
+        highlighted: false
       },
       20: {
-        text: '  solution: null',
+        text: '    refresher_exploration_id: null',
         highlighted: false
       },
       21: {
-        text: 'param_changes: []',
+        text: '  hints: []',
         highlighted: false
       },
       22: {
+        text: '  id: null',
+        highlighted: true
+      },
+      23: {
+        text: '  solution: null',
+        highlighted: false
+      },
+      24: {
+        text: 'param_changes: []',
+        highlighted: false
+      },
+      25: {
         text: ' ',
         highlighted: false
       }
@@ -318,8 +363,13 @@ describe('Exploration history', function() {
     var STATE_2_STRING =
       'classifier_model_id: null\n' +
       'content:\n' +
-      '  audio_translations: {}\n' +
-      '  html: <p>this is card 2</p>\n' +
+      '  content_id: content\n' +
+      '  html: \'<p>this is card 2</p>\n' +
+      '\n' +
+      '    \'\n' +
+      'content_ids_to_audio_translations:\n' +
+      '  content: {}\n' +
+      '  default_outcome: {}\n' +
       'interaction:\n' +
       '  answer_groups: []\n' +
       '  confirmed_unclassified_answers: []\n' +
@@ -329,7 +379,7 @@ describe('Exploration history', function() {
       '  default_outcome:\n' +
       '    dest: final card\n' +
       '    feedback:\n' +
-      '      audio_translations: {}\n' +
+      '      content_id: default_outcome\n' +
       '      html: \'\'\n' +
       '    labelled_as_correct: false\n' +
       '    missing_prerequisite_skill_id: null\n' +
@@ -341,7 +391,7 @@ describe('Exploration history', function() {
       'param_changes: []\n' +
       ' ';
 
-    editor.expectGraphComparisonOf(1, 2).toBe([{
+    var expectedHistoryStates = [{
       label: 'first (was: Introd...',
       color: COLOR_CHANGED
     }, {
@@ -350,32 +400,37 @@ describe('Exploration history', function() {
     }, {
       label: 'final card',
       color: COLOR_ADDED
-    }], [2, 2, 0]);
-    editor.expectTextComparisonOf(
-      1, 2, 'first (was: Introd...'
-    ).toBeWithHighlighting(
+    }];
+    explorationEditorPage.navigateToHistoryTab();
+    var historyGraph = explorationEditorHistoryTab.getHistoryGraph();
+    historyGraph.selectTwoVersions(1, 2);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(2, 2, 0);
+    historyGraph.openStateHistory('first (was: Introd...');
+    historyGraph.expectTextWithHighlightingToMatch(
       VERSION_1_STATE_1_CONTENTS, VERSION_2_STATE_1_CONTENTS);
-    editor.expectTextComparisonOf(1, 2, 'second').toBe(STATE_2_STRING, ' ');
+    historyGraph.closeStateHistory();
 
+    historyGraph.openStateHistory('second');
+    historyGraph.expectTextToMatch(STATE_2_STRING, ' ');
+    historyGraph.closeStateHistory();
+
+    // Reset all checkboxes.
     // Switching the 2 compared versions should give the same result.
-    editor.expectGraphComparisonOf(2, 1).toBe([{
-      label: 'first (was: Introd...',
-      color: COLOR_CHANGED
-    }, {
-      label: 'second',
-      color: COLOR_ADDED
-    }, {
-      label: 'final card',
-      color: COLOR_ADDED
-    }], [2, 2, 0]);
+    historyGraph.deselectTwoVersions(1, 2);
+    historyGraph.selectTwoVersions(2, 1);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(2, 2, 0);
 
-    // Check deleting a state
-    editor.deleteState('second');
-    editor.moveToState('first');
-    editor.ResponseEditor(0).setDestination('final card', false, null);
-    editor.saveChanges();
+    // Check deleting a state.
+    explorationEditorPage.navigateToMainTab();
+    explorationEditorMainTab.deleteState('second');
+    explorationEditorMainTab.moveToState('first');
+    explorationEditorMainTab.getResponseEditor(0).
+      setDestination('final card', false, null);
+    explorationEditorPage.saveChanges();
 
-    editor.expectGraphComparisonOf(2, 3).toBe([{
+    expectedHistoryStates = [{
       label: 'first',
       color: COLOR_CHANGED
     }, {
@@ -384,32 +439,49 @@ describe('Exploration history', function() {
     }, {
       label: 'final card',
       color: COLOR_UNCHANGED
-    }], [3, 1, 2]);
-    editor.expectTextComparisonOf(2, 3, 'second')
-      .toBe(' ', STATE_2_STRING);
+    }];
+    explorationEditorPage.navigateToHistoryTab();
+    historyGraph = explorationEditorHistoryTab.getHistoryGraph();
+    historyGraph.selectTwoVersions(2, 3);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(3, 1, 2);
 
-    // Check renaming a state
-    editor.moveToState('first');
-    editor.setStateName('third');
-    editor.saveChanges();
-    editor.expectGraphComparisonOf(3, 4).toBe([{
+    historyGraph.openStateHistory('second');
+    historyGraph.expectTextToMatch(' ', STATE_2_STRING);
+    historyGraph.closeStateHistory();
+
+    // Check renaming a state.
+    explorationEditorPage.navigateToMainTab();
+    explorationEditorMainTab.moveToState('first');
+    explorationEditorMainTab.setStateName('third');
+    explorationEditorPage.saveChanges();
+    expectedHistoryStates = [{
       label: 'third (was: first)',
       color: COLOR_RENAMED_UNCHANGED
     }, {
       label: 'final card',
       color: COLOR_UNCHANGED
-    }], [1, 0, 0]);
+    }];
+    explorationEditorPage.navigateToHistoryTab();
+    historyGraph = explorationEditorHistoryTab.getHistoryGraph();
+    historyGraph.selectTwoVersions(3, 4);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(1, 0, 0);
 
-    // Check re-inserting a deleted state
-    editor.moveToState('third');
-    editor.ResponseEditor(0).setDestination('second', true, null);
-    editor.moveToState('second');
-    editor.setContent(forms.toRichText('this is card 2'));
-    editor.setInteraction('Continue');
-    editor.setDefaultOutcome(null, 'final card', false);
-    editor.saveChanges();
+    // Check re-inserting a deleted state.
+    explorationEditorPage.navigateToMainTab();
+    explorationEditorMainTab.moveToState('third');
+    explorationEditorMainTab.getResponseEditor(0).
+      setDestination('second', true, null);
+    explorationEditorMainTab.moveToState('second');
+    explorationEditorMainTab.setContent(forms.toRichText('this is card 2'));
+    explorationEditorMainTab.setInteraction('Continue');
 
-    editor.expectGraphComparisonOf(2, 5).toBe([{
+    var responseEditor = explorationEditorMainTab.getResponseEditor('default');
+    responseEditor.setDestination('final card', false, null);
+    explorationEditorPage.saveChanges();
+
+    expectedHistoryStates = [{
       label: 'third (was: first)',
       color: COLOR_CHANGED
     }, {
@@ -418,10 +490,15 @@ describe('Exploration history', function() {
     }, {
       label: 'final card',
       color: COLOR_UNCHANGED
-    }], [2, 0, 0]);
+    }];
+    explorationEditorPage.navigateToHistoryTab();
+    historyGraph = explorationEditorHistoryTab.getHistoryGraph();
+    historyGraph.selectTwoVersions(2, 5);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(2, 0, 0);
 
-    // Check that reverting works
-    editor.revertToVersion(2);
+    // Check that reverting works.
+    explorationEditorHistoryTab.revertToVersion(2);
     general.moveToPlayer();
     explorationPlayerPage.expectContentToMatch(
       forms.toRichText('enter 6 to continue'));
@@ -434,7 +511,7 @@ describe('Exploration history', function() {
     explorationPlayerPage.expectExplorationToBeOver();
 
     general.moveToEditor();
-    editor.expectGraphComparisonOf(4, 6).toBe([{
+    expectedHistoryStates = [{
       label: 'first (was: third)',
       color: COLOR_CHANGED
     }, {
@@ -443,8 +520,12 @@ describe('Exploration history', function() {
     }, {
       label: 'final card',
       color: COLOR_UNCHANGED
-    }], [3, 2, 1]);
-
+    }];
+    explorationEditorPage.navigateToHistoryTab();
+    historyGraph = explorationEditorHistoryTab.getHistoryGraph();
+    historyGraph.selectTwoVersions(4, 6);
+    historyGraph.expectHistoryStatesToMatch(expectedHistoryStates);
+    historyGraph.expectNumberOfLinksToMatch(3, 2, 1);
     users.logout();
   });
 
@@ -455,15 +536,19 @@ describe('Exploration history', function() {
 
 
 describe('ExplorationFeedback', function() {
-  var EXPLORATION_TITLE = 'Sample Exploration';
+  var EXPLORATION_TITLE = 'Exploration with Feedback';
   var EXPLORATION_OBJECTIVE = 'To explore something';
   var EXPLORATION_CATEGORY = 'Algorithms';
   var EXPLORATION_LANGUAGE = 'English';
+  var explorationEditorPage = null;
+  var explorationEditorFeedbackTab = null;
   var creatorDashboardPage = null;
   var libraryPage = null;
   var explorationPlayerPage = null;
 
   beforeEach(function() {
+    explorationEditorPage = new ExplorationEditorPage.ExplorationEditorPage();
+    explorationEditorFeedbackTab = explorationEditorPage.getFeedbackTab();
     creatorDashboardPage = new CreatorDashboardPage.CreatorDashboardPage();
     libraryPage = new LibraryPage.LibraryPage();
     explorationPlayerPage = new ExplorationPlayerPage.ExplorationPlayerPage();
@@ -482,7 +567,7 @@ describe('ExplorationFeedback', function() {
     var feedback = 'A good exploration. Would love to see a few more questions';
     var feedbackResponse = 'Thanks for the feedback';
 
-    // Creator creates and publishes an exploration
+    // Creator creates and publishes an exploration.
     users.login('user1@ExplorationFeedback.com');
     workflow.createAndPublishExploration(
       EXPLORATION_TITLE,
@@ -495,14 +580,15 @@ describe('ExplorationFeedback', function() {
     ).toEqual(0);
     users.logout();
 
-    // Learner plays the exploration and submits a feedback
+    // Learner plays the exploration and submits a feedback.
     users.login('user2@ExplorationFeedback.com');
     libraryPage.get();
+    libraryPage.findExploration(EXPLORATION_TITLE);
     libraryPage.playExploration(EXPLORATION_TITLE);
     explorationPlayerPage.submitFeedback(feedback);
     users.logout();
 
-    // Creator reads the feedback and responds
+    // Creator reads the feedback and responds.
     users.login('user1@ExplorationFeedback.com');
     creatorDashboardPage.get();
     expect(
@@ -510,12 +596,15 @@ describe('ExplorationFeedback', function() {
     ).toEqual(1);
     creatorDashboardPage.navigateToExplorationEditor();
 
-    editor.expectCurrentTabToBeFeedbackTab();
-    editor.readFeedbackMessages().then(function(messages) {
-      expect(messages.length).toEqual(1);
-      expect(messages[0]).toEqual(feedback);
-    });
-    editor.sendResponseToLatestFeedback(feedbackResponse);
+    explorationEditorPage.navigateToFeedbackTab();
+    explorationEditorFeedbackTab.expectToHaveFeedbackThread();
+    explorationEditorFeedbackTab.readFeedbackMessages()
+      .then(function(messages) {
+        expect(messages.length).toEqual(1);
+        expect(messages[0]).toEqual(feedback);
+      });
+    explorationEditorPage.navigateToFeedbackTab();
+    explorationEditorFeedbackTab.sendResponseToLatestFeedback(feedbackResponse);
     users.logout();
   });
 
@@ -526,15 +615,19 @@ describe('ExplorationFeedback', function() {
 
 
 describe('Suggestions on Explorations', function() {
-  var EXPLORATION_TITLE = 'Sample Exploration';
+  var EXPLORATION_TITLE = 'Exploration with Suggestion';
   var EXPLORATION_CATEGORY = 'Algorithms';
   var EXPLORATION_OBJECTIVE = 'To explore something new';
   var EXPLORATION_LANGUAGE = 'English';
   var creatorDashboardPage = null;
   var libraryPage = null;
+  var explorationEditorPage = null;
+  var explorationEditorFeedbackTab = null;
   var explorationPlayerPage = null;
 
   beforeEach(function() {
+    explorationEditorPage = new ExplorationEditorPage.ExplorationEditorPage();
+    explorationEditorFeedbackTab = explorationEditorPage.getFeedbackTab();
     explorationPlayerPage = new ExplorationPlayerPage.ExplorationPlayerPage();
     creatorDashboardPage = new CreatorDashboardPage.CreatorDashboardPage();
     libraryPage = new LibraryPage.LibraryPage();
@@ -559,12 +652,12 @@ describe('Suggestions on Explorations', function() {
       EXPLORATION_CATEGORY,
       EXPLORATION_OBJECTIVE,
       EXPLORATION_LANGUAGE);
-    browser.get(general.SERVER_URL_PREFIX);
     users.logout();
 
-    // Suggester plays the exploration and suggests a change
+    // Suggester plays the exploration and suggests a change.
     users.login('user2@ExplorationSuggestions.com');
     libraryPage.get();
+    libraryPage.findExploration(EXPLORATION_TITLE);
     libraryPage.playExploration(EXPLORATION_TITLE);
 
     var suggestion = 'New Exploration';
@@ -573,27 +666,29 @@ describe('Suggestions on Explorations', function() {
     explorationPlayerPage.submitSuggestion(suggestion, suggestionDescription);
     users.logout();
 
-    // Exploration author reviews the suggestion and accepts it
+    // Exploration author reviews the suggestion and accepts it.
     users.login('user1@ExplorationSuggestions.com');
     creatorDashboardPage.get();
     creatorDashboardPage.navigateToExplorationEditor();
-    general.waitForSystem();
-    editor.getSuggestionThreads().then(function(threads) {
+
+    explorationEditorPage.navigateToFeedbackTab();
+    explorationEditorFeedbackTab.getSuggestionThreads().then(function(threads) {
       expect(threads.length).toEqual(1);
       expect(threads[0]).toMatch(suggestionDescription);
-      editor.acceptSuggestion(suggestionDescription);
-
-      editor.navigateToPreviewTab();
-      explorationPlayerPage.expectContentToMatch(forms.toRichText(suggestion));
-      users.logout();
-
-      // Student logs in and plays the exploration, finds the updated content
-      users.login('user3@ExplorationSuggestions.com');
-      libraryPage.get();
-      libraryPage.playExploration(EXPLORATION_TITLE);
-      explorationPlayerPage.expectContentToMatch(forms.toRichText(suggestion));
-      users.logout();
     });
+    explorationEditorFeedbackTab.acceptSuggestion(suggestionDescription);
+
+    explorationEditorPage.navigateToPreviewTab();
+    explorationPlayerPage.expectContentToMatch(forms.toRichText(suggestion));
+    users.logout();
+
+    // Student logs in and plays the exploration, finds the updated content.
+    users.login('user3@ExplorationSuggestions.com');
+    libraryPage.get();
+    libraryPage.findExploration(EXPLORATION_TITLE);
+    libraryPage.playExploration(EXPLORATION_TITLE);
+    explorationPlayerPage.expectContentToMatch(forms.toRichText(suggestion));
+    users.logout();
   });
 
   afterEach(function() {

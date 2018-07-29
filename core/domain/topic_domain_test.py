@@ -35,7 +35,8 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
         self.topic = topic_domain.Topic.create_default_topic(
             self.topic_id, 'Name')
         self.topic.subtopics = [
-            topic_domain.Subtopic('id_1', 'Title', ['skill_id_1'])]
+            topic_domain.Subtopic(1, 'Title', ['skill_id_1'])]
+        self.topic.next_subtopic_id = 2
 
         self.user_id_a = self.get_user_id_from_email('a@example.com')
         self.user_id_b = self.get_user_id_from_email('b@example.com')
@@ -55,11 +56,18 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
             'additional_story_ids': [],
             'uncategorized_skill_ids': [],
             'subtopics': [],
+            'next_subtopic_id': 1,
             'language_code': constants.DEFAULT_LANGUAGE_CODE,
             'subtopic_schema_version': feconf.CURRENT_SUBTOPIC_SCHEMA_VERSION,
             'version': 0
         }
         self.assertEqual(topic.to_dict(), expected_topic_dict)
+
+    def test_get_all_skill_ids(self):
+        self.topic.uncategorized_skill_ids = ['skill_id_2', 'skill_id_3']
+        self.assertEqual(
+            self.topic.get_all_skill_ids(),
+            ['skill_id_2', 'skill_id_3', 'skill_id_1'])
 
     def test_delete_story(self):
         self.topic.canonical_story_ids = [
@@ -109,7 +117,7 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
         self._assert_validation_error('Expected skill ids to be a list')
         self.topic.subtopics[0].skill_ids = ['skill_id', 'skill_id']
         self._assert_validation_error(
-            'The skill id skill_id is duplicated in the subtopic')
+            'Expected all skill ids to be distinct.')
         self.topic.subtopics[0].skill_ids = [1, 2]
         self._assert_validation_error('Expected each skill id to be a string')
 
@@ -124,6 +132,14 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
     def test_description_validation(self):
         self.topic.description = 1
         self._assert_validation_error('Expected description to be a string')
+
+    def test_next_subtopic_id_validation(self):
+        self.topic.next_subtopic_id = '1'
+        self._assert_validation_error('Expected next_subtopic_id to be an int')
+        self.topic.next_subtopic_id = 1
+        self._assert_validation_error(
+            'The id for subtopic 1 is greater than or equal to '
+            'next_subtopic_id 1')
 
     def test_language_code_validation(self):
         self.topic.language_code = 0
@@ -165,7 +181,7 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
             topic_domain.Subtopic('id_2', 'Title2', ['skill_id_2']))
         with self.assertRaisesRegexp(
             Exception,
-            'The skill id skill_id_1 already exists in subtopic with id id_1'):
+            'The skill id skill_id_1 already exists in subtopic with id 1'):
             self.topic.add_uncategorized_skill_id('skill_id_1')
         self.topic.add_uncategorized_skill_id('skill_id_3')
         self.assertEqual(self.topic.uncategorized_skill_ids, ['skill_id_3'])
@@ -182,7 +198,7 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
     def test_move_skill_id_to_subtopic(self):
         self.topic.uncategorized_skill_ids = ['skill_id_1']
         self.topic.subtopics[0].skill_ids = ['skill_id_2']
-        self.topic.move_skill_id_to_subtopic(None, 'id_1', 'skill_id_1')
+        self.topic.move_skill_id_to_subtopic(None, 1, 'skill_id_1')
         self.assertEqual(self.topic.uncategorized_skill_ids, [])
         self.assertEqual(
             self.topic.subtopics[0].skill_ids, ['skill_id_2', 'skill_id_1'])
@@ -195,24 +211,23 @@ class TopicDomainUnitTests(test_utils.GenericTestBase):
             self.topic.move_skill_id_to_subtopic(None, 'id_1', 'skill_id_3')
 
     def test_get_subtopic_index(self):
-        self.assertIsNone(self.topic.get_subtopic_index('id_2'))
-        self.assertEqual(self.topic.get_subtopic_index('id_1'), 0)
+        self.assertIsNone(self.topic.get_subtopic_index(2))
+        self.assertEqual(self.topic.get_subtopic_index(1), 0)
 
     def test_to_dict(self):
         user_ids = [self.user_id_a, self.user_id_b]
-        topic_rights = topic_domain.TopicRights(
-            self.topic_id, user_ids)
+        topic_rights = topic_domain.TopicRights(self.topic_id, user_ids, False)
         expected_dict = {
             'topic_id': self.topic_id,
-            'manager_names': ['A', 'B']
+            'manager_names': ['A', 'B'],
+            'topic_is_published': False
         }
 
         self.assertEqual(expected_dict, topic_rights.to_dict())
 
     def test_is_manager(self):
         user_ids = [self.user_id_a, self.user_id_b]
-        topic_rights = topic_domain.TopicRights(
-            self.topic_id, user_ids)
+        topic_rights = topic_domain.TopicRights(self.topic_id, user_ids, False)
         self.assertTrue(topic_rights.is_manager(self.user_id_a))
         self.assertTrue(topic_rights.is_manager(self.user_id_b))
         self.assertFalse(topic_rights.is_manager('fakeuser'))
