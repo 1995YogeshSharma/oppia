@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html ng-app="oppia" lang="<[currentLang]>" ng-controller="Base" itemscope itemtype="http://schema.org/Organization">
   <head>
@@ -10,10 +9,10 @@
     <!-- Tiles for Internet Explorer. -->
     <meta name="application-name" content="">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-square70x70logo" content="/build/assets/images/logo/msapplication-tiny.png">
-    <meta name="msapplication-square150x150logo" content="/build/assets/images/logo/msapplication-square.png">
-    <meta name="msapplication-wide310x150logo" content="/build/assets/images/logo/msapplication-wide.png">
-    <meta name="msapplication-square310x310logo" content="/build/assets/images/logo/msapplication-large.png">
+    <meta name="msapplication-square70x70logo" content="/assets/images/logo/msapplication-tiny.png">
+    <meta name="msapplication-square150x150logo" content="/assets/images/logo/msapplication-square.png">
+    <meta name="msapplication-wide310x150logo" content="/assets/images/logo/msapplication-wide.png">
+    <meta name="msapplication-square310x310logo" content="/assets/images/logo/msapplication-large.png">
 
     <!-- The itemprops are for G+ sharing. -->
     <meta itemprop="name" content="">
@@ -24,9 +23,9 @@
     <meta property="og:url" content="">
     <meta property="og:description" content="">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="/build/assets/images/logo/288x288_logo_mint.png">
+    <meta property="og:image" content="/assets/images/logo/288x288_logo_mint.png">
 
-    <link rel="apple-touch-icon" href="/build/assets/images/logo/favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/logo/favicon.png">
 
     <!-- The title is bound to the rootScope. The content of the block
     maintitle can be a string or a translation id. If it is a translation it
@@ -42,48 +41,13 @@
       href="https://fonts.googleapis.com/css?family=Capriola|Rubik|Roboto|Material+Icons|Open+Sans:400,600">
 
   <link rel="stylesheet" type="text/css" media="screen"
-      href="/build/third_party/generated/css/third_party.min.css">
+      href="/third_party/generated/css/third_party.css">
 
 <link rel="stylesheet" type="text/css" media="screen"
-      href="/css/oppia.css">
+      href="/templates/dev/head/css/oppia.css">
     
 
     <script>
-      var GLOBALS = {
-        ACTIVITY_STATUS_PRIVATE: JSON.parse(
-          ''),
-        ACTIVITY_STATUS_PUBLIC: JSON.parse(
-          ''),
-        ADDITIONAL_ANGULAR_MODULES: [],
-        ASSET_DIR_PREFIX: JSON.parse(''),
-        can_create_collections: JSON.parse(
-          ''),
-        csrf_token: JSON.parse(''),
-        DEV_MODE: JSON.parse(''),
-        status_code: JSON.parse(''),
-        GCS_RESOURCE_BUCKET_NAME: JSON.parse(''),
-        INVALID_NAME_CHARS: JSON.parse(''),
-        NAV_MODE: JSON.parse(''),
-        /* A list of functions to be called when an exploration is completed */
-        POST_COMPLETION_HOOKS: [],
-        preferredSiteLanguageCode: JSON.parse(
-          ''),
-        SITE_NAME: JSON.parse(''),
-        SYSTEM_USERNAMES: JSON.parse(''),
-        TEMPLATE_DIR_PREFIX: JSON.parse(''),
-        isAdmin: JSON.parse(''),
-        isModerator: JSON.parse(''),
-        isSuperAdmin: JSON.parse(''),
-        loginUrl: JSON.parse(''),
-        logoutUrl: JSON.parse(''),
-        profilePictureDataUrl: JSON.parse(''),
-        userIsLoggedIn: JSON.parse(''),
-        username: JSON.parse(''),
-        allowYamlFileUpload: JSON.parse(''),
-        PROMO_BAR_IS_ENABLED: JSON.parse(''),
-        PROMO_BAR_MESSAGE: JSON.parse('')
-      };
-
       
     </script>
 
@@ -91,8 +55,6 @@
   
       <script src="/assets/rich_text_components_definitions.js"></script>
 <script src="/assets/constants.js"></script>
-
-  <script src="/assets/hashes.js"></script>
 
 <!-- jquery.js, angular.js and jquery-ui.js are removed from bundled js because
 they need to be at the header. Including bundled js at the header will block
@@ -109,8 +71,7 @@ rendering.-->
     
   </head>
 
-  <body>
-    
+  <body>    
       <div role="button" tabindex="0" ng-click="skipToMainContent()" class="oppia-skip-to-content protractor-test-skip-link">Skip to Main Content</div>
       <promo-bar ng-if="promoBarIsEnabled" promo-message="promoBarMessage">
       </promo-bar>
@@ -126,7 +87,7 @@ rendering.-->
               <nav class="navbar navbar-default oppia-navbar oppia-prevent-selection" role="navigation" headroom tolerance="0" offset="0">
                 <div class="navbar-container">
                   <top-navigation-bar></top-navigation-bar>
-                  <div class="collapse navbar-collapse oppia-navbar-collapse ng-cloak">
+                  <div class="collapse navbar-collapse oppia-navbar-collapse">
                     
   <ul class="nav navbar-nav oppia-navbar-breadcrumb">
     <li>
@@ -145,15 +106,15 @@ rendering.-->
               <div class="oppia-top-of-page-padding">
               </div>
 
-              <div tabindex="0" aria-label="Oppia Main Content" id="oppia-main-content" class="protractor-test-main-content" ng-cloak>
-    <div class="oppia-toast-container toast-top-center">
+              <div tabindex="0" aria-label="Oppia Main Content" id="oppia-main-content" class="protractor-test-main-content">
+ <!--    <div class="oppia-toast-container toast-top-center">
       <div ng-repeat="warning in (AlertsService.warnings | limitTo:5) track by $index" class="toast toast-warning oppia-toast">
         <button type="button" class="toast-close-button" ng-click="AlertsService.deleteWarning(warning)" role="button">&times;</button>
         <div class="toast-message">
           <[warning.content]>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div>
       <div ng-repeat="message in AlertsService.messages track by $index">
@@ -161,15 +122,15 @@ rendering.-->
       </div>
     </div>
 
-    <div ng-show="loadingMessage" class="oppia-loading-fullpage">
+    <!-- <ng-hide class="oppia-loading-fullpage">
       <div class="oppia-align-center">
         <span translate="<[loadingMessage]>"></span>
         <span class="oppia-loading-dot-one">.</span>
         <span class="oppia-loading-dot-two">.</span>
         <span class="oppia-loading-dot-three">.</span>
       </div>
-    </div>
-    <div ng-show="!loadingMessage">
+    </ng-hide> -->
+    <ng-show>
       
   <div class="oppia-static-header">
     <h1 translate="I18N_ABOUT_PAGE_HEADING"></h1>
@@ -696,7 +657,7 @@ rendering.-->
 
     </div>
   </div>
-            </div>
+            </ng-show>
 
             <noscript>
               <div class="oppia-page-cards-container">
@@ -718,60 +679,55 @@ rendering.-->
         </div>
       </div>
 
-      
-
-      
     
-
-    
-  <script src="/build/third_party/generated/js/third_party.min.js"></script>
+  <script src="/third_party/generated/js/third_party.js"></script>
 
 
-    <script src="/app.js"></script>
-    <script src="/directives.js"></script>
-    <script src="/filters.js"></script>
-    <script src="/i18n.js"></script>
+    <script src="/templates/dev/head/app.js"></script>
+    <script src="/templates/dev/head/directives.js"></script>
+    <script src="/templates/dev/head/filters.js"></script>
+    <script src="/templates/dev/head/i18n.js"></script>
 
-    <script src="/pages/Base.js"></script>
+    <script src="/templates/dev/head/pages/Base.js"></script>
 
-    <script src="/services/AlertsService.js"></script>
-    <script src="/services/ExplorationContextService.js"></script>
-    <script src="/services/UtilsService.js"></script>
-    <script src="/services/DebouncerService.js"></script>
-    <script src="/services/DateTimeFormatService.js"></script>
-    <script src="/services/IdGenerationService.js"></script>
-    <script src="/services/ValidatorsService.js"></script>
-    <script src="/services/HtmlEscaperService.js"></script>
-    <script src="/services/TranslationFileHashLoaderService.js"></script>
-    <script src="/services/RteHelperService.js"></script>
-    <script src="/services/StateRulesStatsService.js"></script>
-    <script src="/services/ConstructTranslationIdsService.js"></script>
-    <script src="/services/contextual/DeviceInfoService.js"></script>
-    <script src="/services/contextual/UrlService.js"></script>
-    <script src="/services/contextual/WindowDimensionsService.js"></script>
-    <script src="/services/stateful/BackgroundMaskService.js"></script>
-    <script src="/services/stateful/FocusManagerService.js"></script>
+    <script src="/templates/dev/head/services/AlertsService.js"></script>
+    <script src="/templates/dev/head/services/ExplorationContextService.js"></script>
+    <script src="/templates/dev/head/services/UtilsService.js"></script>
+    <script src="/templates/dev/head/services/DebouncerService.js"></script>
+    <script src="/templates/dev/head/services/DateTimeFormatService.js"></script>
+    <script src="/templates/dev/head/services/IdGenerationService.js"></script>
+    <script src="/templates/dev/head/services/ValidatorsService.js"></script>
+    <script src="/templates/dev/head/services/HtmlEscaperService.js"></script>
+    <script src="/templates/dev/head/services/TranslationFileHashLoaderService.js"></script>
+    <script src="/templates/dev/head/services/RteHelperService.js"></script>
+    <script src="/templates/dev/head/services/StateRulesStatsService.js"></script>
+    <script src="/templates/dev/head/services/ConstructTranslationIdsService.js"></script>
+    <script src="/templates/dev/head/services/contextual/DeviceInfoService.js"></script>
+    <script src="/templates/dev/head/services/contextual/UrlService.js"></script>
+    <script src="/templates/dev/head/services/contextual/WindowDimensionsService.js"></script>
+    <script src="/templates/dev/head/services/stateful/BackgroundMaskService.js"></script>
+    <script src="/templates/dev/head/services/stateful/FocusManagerService.js"></script>
 
-    <script src="/components/alerts/AlertMessageDirective.js"></script>
-    <script src="/components/create_button/CreateActivityButtonDirective.js"></script>
+    <script src="/templates/dev/head/components/alerts/AlertMessageDirective.js"></script>
+    <script src="/templates/dev/head/components/create_button/CreateActivityButtonDirective.js"></script>
 
-    <script src="/components/forms/ObjectEditorDirective.js"></script>
-    <script src="/components/promo/PromoBarDirective.js"></script>
-    <script src="/components/side_navigation_bar/SideNavigationBarDirective.js"></script>
-    <script src="/components/social_buttons/SocialButtonsDirective.js"></script>
-    <script src="/components/top_navigation_bar/TopNavigationBarDirective.js"></script>
+    <script src="/templates/dev/head/components/forms/ObjectEditorDirective.js"></script>
+    <script src="/templates/dev/head/components/promo/PromoBarDirective.js"></script>
+    <script src="/templates/dev/head/components/side_navigation_bar/SideNavigationBarDirective.js"></script>
+    <script src="/templates/dev/head/components/social_buttons/SocialButtonsDirective.js"></script>
+    <script src="/templates/dev/head/components/top_navigation_bar/TopNavigationBarDirective.js"></script>
 
-    <script src="/components/CollectionCreationService.js"></script>
-    <script src="/components/ExplorationCreationService.js"></script>
+    <script src="/templates/dev/head/components/CollectionCreationService.js"></script>
+    <script src="/templates/dev/head/components/ExplorationCreationService.js"></script>
 
-    <script src="/domain/sidebar/SidebarStatusService.js"></script>
-    <script src="/domain/utilities/UrlInterpolationService.js"></script>
+    <script src="/templates/dev/head/domain/sidebar/SidebarStatusService.js"></script>
+    <script src="/templates/dev/head/domain/utilities/UrlInterpolationService.js"></script>
 
     
   
     
-  <script src="/pages/about/About.js"></script>
-  <script src="/components/background/BackgroundBannerDirective.js"></script>
+  <script src="/templates/dev/head/pages/about/About.js"></script>
+  <script src="/templates/dev/head/components/background/BackgroundBannerDirective.js"></script>
 
   </body>
 </html>

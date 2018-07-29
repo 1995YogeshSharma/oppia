@@ -77,7 +77,7 @@ def main():
     env = get_jinja_env(template_dir)
     values = {}
     values['profile_picture_data_url'] = None
-    values['DEV_MODE'] = True
+    values['DEV_MODE'] = False
     #print env.get_template('pages/error/error.html').render(values)
     print (env.get_template('pages/about/about.html').render(values)).encode('utf-8')
 
