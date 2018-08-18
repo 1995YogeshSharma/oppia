@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/suggestion/SuggestionObjectFactory.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Factory for creating new frontend instances of suggestion\n   domain objects.\n */\n\noppia.factory(\'SuggestionObjectFactory\', [function() {\n  var Suggestion = function(\n      suggestionType, suggestionId, targetType, targetId, status, authorName,\n      stateName, newValue, oldValue, lastUpdated) {\n    this.suggestionType = suggestionType;\n    this.suggestionId = suggestionId;\n    this.targetType = targetType;\n    this.targetId = targetId;\n    this.status = status;\n    this.authorName = authorName;\n    this.stateName = stateName;\n    this.newValue = newValue;\n    this.oldValue = oldValue;\n    this.lastUpdated = lastUpdated;\n  };\n\n  Suggestion.prototype.getThreadId = function() {\n    if (constants.ENABLE_GENERALIZED_FEEDBACK_THREADS) {\n      return this.suggestionId;\n    } else {\n      return this.suggestionId.slice(this.suggestionId.indexOf(\'.\') + 1);\n    }\n  };\n\n  Suggestion.createFromBackendDict = function(suggestionBackendDict) {\n    return new Suggestion(\n      suggestionBackendDict.suggestion_type,\n      suggestionBackendDict.suggestion_id, suggestionBackendDict.target_type,\n      suggestionBackendDict.target_id, suggestionBackendDict.status,\n      suggestionBackendDict.author_name,\n      suggestionBackendDict.change.state_name,\n      suggestionBackendDict.change.new_value,\n      suggestionBackendDict.change.old_value,\n      suggestionBackendDict.last_updated);\n  };\n\n  return Suggestion;\n}]);'
+
+blocks = {}
+debug_info = ''

@@ -19,11 +19,9 @@ def block_footer_js(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     l_0_super = context.super('footer_js', block_footer_js)
-    l_0_TEMPLATE_DIR_PREFIX = resolve('TEMPLATE_DIR_PREFIX')
     pass
-    yield u'\n  %s\n  <script src="%s/components/background/BackgroundBannerDirective.js"></script>\n' % (
+    yield u'\n  %s\n  <script src="/templates/dev/head/components/background/BackgroundBannerDirective.js"></script>\n' % (
         escape(context.call(l_0_super)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
     )
 
 def block_footer(context, missing=missing):
@@ -49,7 +47,7 @@ def block_maintitle(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'I18N_GET_STARTED_PAGE_TITLE'
+    yield u'\n  I18N_GET_STARTED_PAGE_TITLE\n'
 
 def block_header_js(context, missing=missing):
     resolve = context.resolve_or_missing
@@ -69,4 +67,4 @@ def block_navbar_breadcrumb(context, missing=missing):
     yield u'\n  <ul class="nav navbar-nav oppia-navbar-breadcrumb">\n    <li>\n      <span class="oppia-navbar-breadcrumb-separator"></span>\n      Get Started\n    </li>\n  </ul>\n'
 
 blocks = {'footer_js': block_footer_js, 'footer': block_footer, 'content': block_content, 'maintitle': block_maintitle, 'header_js': block_header_js, 'navbar_breadcrumb': block_navbar_breadcrumb}
-debug_info = '1=11&85=17&86=25&87=26&90=29&91=35&18=40&3=47&5=54&6=61&9=64'
+debug_info = '1=11&87=17&88=24&92=27&93=33&20=38&3=45&7=52&8=59&11=62'

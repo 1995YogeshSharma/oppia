@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/suggestion/QuestionSuggestionObjectFactory.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Factory for creating new frontend instances of question\n   suggestion domain objects.\n */\n\noppia.factory(\'QuestionSuggestionObjectFactory\', [\n  \'QuestionObjectFactory\', function(QuestionObjectFactory) {\n    var Suggestion = function(\n        suggestionType, suggestionId, targetType, targetId, status, authorName,\n        lastUpdated, question, skillId) {\n      this.suggestionType = suggestionType;\n      this.suggestionId = suggestionId;\n      this.targetType = targetType;\n      this.targetId = targetId;\n      this.status = status;\n      this.authorName = authorName;\n      this.lastUpdated = lastUpdated;\n      this.question = question;\n      this.skillId = skillId;\n    };\n\n    Suggestion.prototype.getThreadId = function() {\n      return this.suggestionId;\n    };\n\n    Suggestion.createFromBackendDict = function(suggestionBackendDict) {\n      question = QuestionObjectFactory.createFromBackendDict(\n        suggestionBackendDict.change.question_dict);\n      return new Suggestion(\n        suggestionBackendDict.suggestion_type,\n        suggestionBackendDict.suggestion_id, suggestionBackendDict.target_type,\n        suggestionBackendDict.target_id, suggestionBackendDict.status,\n        suggestionBackendDict.author_name, suggestionBackendDict.last_updated,\n        question, suggestionBackendDict.change.skill_id);\n    };\n\n    return Suggestion;\n  }\n]);'
+
+blocks = {}
+debug_info = ''

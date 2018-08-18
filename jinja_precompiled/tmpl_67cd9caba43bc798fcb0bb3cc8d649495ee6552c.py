@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/skill/ConceptCardObjectFactory.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Object factory for creating a front-end instance of a\n * concept card. In the backend, this is referred to as SkillContents.\n */\n\noppia.factory(\'ConceptCardObjectFactory\', [\n  function() {\n    var ConceptCard = function(explanation, workedExamples) {\n      this._explanation = explanation;\n      this._workedExamples = workedExamples;\n    };\n\n    ConceptCard.prototype.toBackendDict = function() {\n      return {\n        explanation: this._explanation,\n        worked_examples: this._workedExamples\n      };\n    };\n\n    ConceptCard.createFromBackendDict = function(conceptCardBackendDict) {\n      return new ConceptCard(\n        conceptCardBackendDict.explanation,\n        conceptCardBackendDict.worked_examples);\n    };\n\n    ConceptCard.prototype.getExplanation = function() {\n      return this._explanation;\n    };\n\n    ConceptCard.prototype.setExplanation = function(explanation) {\n      this._explanation = explanation;\n    };\n\n    ConceptCard.prototype.getWorkedExamples = function() {\n      return this._workedExamples.slice();\n    };\n\n    ConceptCard.prototype.setWorkedExamples = function(workedExamples) {\n      this._workedExamples = workedExamples.slice();\n    };\n\n    // Create an interstitial concept card that would be displayed in the\n    // editor until the actual skill is fetched from the backend.\n    ConceptCard.createInterstitialConceptCard = function() {\n      return new ConceptCard(\'Loading review material\', []);\n    };\n\n    return ConceptCard;\n  }\n]);'
+
+blocks = {}
+debug_info = ''

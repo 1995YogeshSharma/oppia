@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/story_editor/story_editor_navbar_directive.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<ul class="nav navbar-nav oppia-navbar-nav navbar-right ng-cloak">\n  <li ng-class="{\'active\': true, \'uib-dropdown\': getWarningsCount()}" ng-attr-uib-dropdown="<[getWarningsCount()]>">\n    <a uib-tooltip="Editor" class="protractor-test-main-tab">\n      <i class="material-icons">&#xE254;</i>\n    </a>\n    <div ng-show="getWarningsCount()"\n         class="oppia-editor-warnings-indicator oppia-editor-warnings-error-color">\n      <span class="oppia-editor-warnings-count">\n        <[getWarningsCount()]>\n      </span>\n    </div>\n    <ul uib-dropdown-menu class="uib-dropdown-menu oppia-editor-warnings-box">\n      <span class="oppia-editor-warnings-header">Warnings</span>\n      <li class="oppia-editor-warnings-text"\n          ng-repeat="issue in validationIssues track by $index">\n        <hr class="oppia-editor-warnings-separator">\n        <[issue]>\n      </li>\n    </ul>\n  </li>\n  <li style="margin-right: 20px; margin-top: 8px; margin-left: 10px;">\n    <button class="btn btn-default oppia-save-draft-button"\n            ng-class="{\'btn-success\': isStorySaveable()}"\n            ng-click="saveChanges()"\n            ng-disabled="!isStorySaveable()">\n      <span ng-if="!isSaveInProgress()">\n        <i class="material-icons md-18 md-dark oppia-save-publish-button-icon"\n           alt="Save Story">\n          &#xE161;\n        </i>\n        <span class="oppia-save-publish-button-label">Save Changes</span>\n        <span class="hidden-sm hidden-xs" style="opacity: 0.5"\n              ng-if="getChangeListLength() > 0">\n          (<[getChangeListLength()]>)\n        </span>\n      </span>\n\n      <span ng-if="isSaveInProgress()">\n        <span class="oppia-save-publish-button-label">Saving</span>\n        <loading-dots></loading-dots>\n      </span>\n    </button>\n    <button type="button" ng-if="isStorySaveable()"\n            class="btn btn-default"\n            ng-click="discardChanges()">\n      <i class="material-icons md-18 md-dark oppia-save-publish-button-icon"\n         alt="Discard current draft">\n        &#xE2C3;\n      </i>\n      Discard Changes\n    </button>\n  </li>\n</ul>'
+
+blocks = {}
+debug_info = ''

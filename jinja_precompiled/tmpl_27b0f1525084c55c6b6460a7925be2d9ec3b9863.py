@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<text-angular-rte ng-if="!isDisabled()" html-content="$parent.localValue"\n                ui-config="uiConfig()" label-for-focus-target="labelForFocusTarget()">\n</text-angular-rte>\n<span ng-if="isDisabled()"\n    ng-class="{\'oppia-disabled-contenteditable\': isDisabled()}"\n    ng-bind-html="localValue">\n</span>'
+    yield u'<!-- label-for-focus-target feature is removed since CKEditor has a\nfocusManager to manage the focus activity automatically. -->\n<ck-editor-rte ng-if="!isDisabled()" ng-model="$parent.localValue"\n               ui-config="uiConfig()">\n</ck-editor-rte>\n\n<span ng-if="isDisabled()"\n      ng-class="{\'oppia-disabled-contenteditable\': isDisabled()}"\n      ng-bind-html="localValue">\n</span>'
 
 blocks = {}
 debug_info = ''

@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<md-button class="oppia-learner-confirm-button protractor-test-continue-to-next-card-button"\n           focus-on="<[::focusLabel]>"\n           ng-click="onClickContinueButton()"\n           style="margin-top: 12px;"\n           aria-label="Continue">\n  <div ng-if="!isLearnAgainButton()">\n    <span translate="I18N_PLAYER_CONTINUE_BUTTON"></span>\n    <i class="fa fa-arrow-right"\n       style="font-size: 19px; padding-top: 1.5px;">\n   </i>\n  </div>\n  <div ng-if="isLearnAgainButton()">\n    <span translate="I18N_PLAYER_LEARN_AGAIN_BUTTON"></span>\n    <i class="fa fa-repeat"\n       style="font-size: 19px; padding-top: 1.5px;">\n   </i>\n  </div>\n</md-button>'
+    yield u'<md-button class="oppia-learner-confirm-button protractor-test-continue-to-next-card-button"\n           focus-on="<[::focusLabel]>"\n           ng-click="onClickContinueButton()"\n           style="margin-top: 12px;"\n           aria-label="Continue">\n  <div ng-if="!isLearnAgainButton()">\n    <span translate="I18N_PLAYER_CONTINUE_BUTTON"></span>\n    <i class="fa fa-arrow-right"\n       style="font-size: 19px; padding-top: 1.5px;">\n    </i>\n  </div>\n  <div ng-if="isLearnAgainButton()">\n    <span translate="I18N_PLAYER_LEARN_AGAIN_BUTTON"></span>\n    <i class="fa fa-repeat"\n       style="font-size: 19px; padding-top: 1.5px;">\n    </i>\n  </div>\n</md-button>'
 
 blocks = {}
 debug_info = ''

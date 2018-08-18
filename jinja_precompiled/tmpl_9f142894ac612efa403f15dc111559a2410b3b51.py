@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<input type="text" ng-model="localValue" class="form-control" ng-disabled="isDisabled()"\n     required require-is-valid-expression focus-on="<[labelForFocusTarget()]>">'
+    yield u'<input type="text" ng-model="localValue" class="form-control" ng-disabled="isDisabled()"\n       required require-is-valid-expression focus-on="<[labelForFocusTarget()]>">'
 
 blocks = {}
 debug_info = ''

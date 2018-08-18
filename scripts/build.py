@@ -613,6 +613,15 @@ def build_files(source, target, file_hashes, file_formats=None):
                 # Skip files that are not the specified format.
                 continue
             tasks.append(task)
+
+        #extra change
+        task = threading.Thread(
+            target=minify_func,
+            args=('static_files/temp_about_dev.html',
+            'static_files/temp_about.html', 
+            file_hashes, 'temp_about.html'))
+        tasks.append(task)
+        
         try:
             _execute_tasks(tasks)
         except Exception as e:

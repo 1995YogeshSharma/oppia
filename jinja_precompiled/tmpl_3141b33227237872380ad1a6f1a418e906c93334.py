@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/topic_editor/TopicEditorRoutingService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Service that handles routing for the topic editor page.\n */\n\noppia.factory(\'TopicEditorRoutingService\', [\n  \'$rootScope\', \'$location\', \'$window\', \'$timeout\', \'$interval\',\n  function(\n      $rootScope, $location, $window, $timeout, $interval) {\n    var MAIN_TAB = \'main\';\n    var SUBTOPICS_TAB = \'subtopics\';\n    var QUESTIONS_TAB = \'questions\';\n\n    var _tabs = {\n      active: MAIN_TAB\n    };\n\n    // When the URL path changes, reroute to the appropriate tab in the\n    // topic editor page.\n    $rootScope.$watch(function() {\n      return $location.path();\n    }, function(newPath, oldPath) {\n      if (newPath === \'\') {\n        $location.path(oldPath);\n        return;\n      }\n      if (!oldPath) {\n        // This can happen when clicking on links whose href is "#".\n        return;\n      }\n\n      if (newPath === \'/\') {\n        _tabs.active = MAIN_TAB;\n      } else if (newPath === \'/subtopics\') {\n        _tabs.active = SUBTOPICS_TAB;\n      } else if (newPath === \'/questions\') {\n        _tabs.active = QUESTIONS_TAB;\n      }\n    });\n\n    var TopicEditorRouterService = {\n      getTabStatuses: function() {\n        return _tabs;\n      },\n      navigateToMainTab: function() {\n        $location.path(\'\');\n      },\n      navigateToSubtopicsTab: function() {\n        $location.path(\'/subtopics\');\n      },\n      navigateToQuestionsTab: function() {\n        $location.path(\'/questions\');\n      }\n    };\n\n    return TopicEditorRouterService;\n  }\n]);'
+
+blocks = {}
+debug_info = ''

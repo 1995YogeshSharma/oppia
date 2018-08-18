@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/question/PretestQuestionBackendApiService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview Service to receive questions as pretests for an exploration.\n */\noppia.constant(\n  \'PRETEST_QUESTIONS_URL_TEMPLATE\',\n  \'/pretest_handler/<exploration_id>?story_id=<story_id>&cursor=<cursor>\');\n\noppia.factory(\'PretestQuestionBackendApiService\', [\n  \'$http\', \'$q\', \'PRETEST_QUESTIONS_URL_TEMPLATE\', \'UrlInterpolationService\',\n  function(\n      $http, $q, PRETEST_QUESTIONS_URL_TEMPLATE, UrlInterpolationService) {\n    var _cursor = \'\';\n\n    var _fetchPretestQuestions = function(\n        explorationId, storyId, successCallback, errorCallback) {\n      if (!storyId) {\n        successCallback([]);\n        return;\n      }\n      var pretestDataUrl = UrlInterpolationService.interpolateUrl(\n        PRETEST_QUESTIONS_URL_TEMPLATE, {\n          exploration_id: explorationId,\n          story_id: storyId,\n          cursor: _cursor\n        });\n\n      $http.get(pretestDataUrl).then(function(response) {\n        var pretestQuestionDicts =\n          angular.copy(response.data.pretest_question_dicts);\n        _cursor = response.data.next_start_cursor;\n        if (successCallback) {\n          successCallback(pretestQuestionDicts);\n        }\n      }, function(errorResponse) {\n        if (errorCallback) {\n          errorCallback(errorResponse.data);\n        }\n      });\n    };\n\n    return {\n      fetchPretestQuestions: function(explorationId, storyId) {\n        return $q(function(resolve, reject) {\n          _fetchPretestQuestions(explorationId, storyId, resolve, reject);\n        });\n      }\n    };\n  }\n]);'
+
+blocks = {}
+debug_info = ''

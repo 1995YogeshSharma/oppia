@@ -20,7 +20,7 @@ def block_content(context, missing=missing):
     if 0: yield None
     l_0_full_google_group_url = resolve('full_google_group_url')
     pass
-    yield u'\n  <style>\n    html, body {\n      background: #fff;\n    }\n  </style>\n\n  <div class="container">\n    <div class="oppia-forum" ng-controller="Forum">\n      <div ng-if="DEV_MODE" class="oppia-warning">\n        <strong>Warning:</strong> This page may not display correctly on localhost. To view it, change \'localhost\' to \'127.0.0.1\' in the URL bar.\n      </div>\n\n      <iframe src="%s" frameborder="0" height="1300" style="width: 100%%;">\n      </iframe>\n    </div>\n  </div>\n' % (
+    yield u'\n  <style>\n    html, body {\n      background: #fff;\n    }\n    .oppia-forum {\n      font-size: large;\n      margin: 5px auto;\n      margin-top: 0;\n      min-height: 400px;\n      padding: 20px;\n    }\n    .oppia-forum-warning {\n      background: #F9EDBE;\n      max-width: 700px;\n      width: 80%%;\n    }\n  </style>\n\n  <div class="container">\n    <div class="oppia-forum" ng-controller="Forum">\n      <div ng-if="DEV_MODE" class="oppia-forum-warning">\n        <strong>Warning:</strong> This page may not display correctly on localhost. To view it, change \'localhost\' to \'127.0.0.1\' in the URL bar.\n      </div>\n\n      <iframe src="%s" frameborder="0" height="1300" style="width: 100%%;">\n      </iframe>\n    </div>\n  </div>\n' % (
         escape((undefined(name='full_google_group_url') if l_0_full_google_group_url is missing else l_0_full_google_group_url)), 
     )
 
@@ -29,11 +29,9 @@ def block_footer_js(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     l_0_super = context.super('footer_js', block_footer_js)
-    l_0_TEMPLATE_DIR_PREFIX = resolve('TEMPLATE_DIR_PREFIX')
     pass
-    yield u'\n  %s\n  <script src="%s/pages/forum/Forum.js"></script>\n' % (
+    yield u'\n  %s\n  <script src="/templates/dev/head/pages/forum/Forum.js"></script>\n' % (
         escape(context.call(l_0_super)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
     )
 
 def block_maintitle(context, missing=missing):
@@ -62,4 +60,4 @@ def block_navbar_breadcrumb(context, missing=missing):
     yield u'\n  <ul class="nav navbar-nav oppia-navbar-breadcrumb">\n    <li>\n      <span class="oppia-navbar-breadcrumb-separator"></span>\n      Forum\n    </li>\n  </ul>\n'
 
 blocks = {'content': block_content, 'footer_js': block_footer_js, 'maintitle': block_maintitle, 'footer': block_footer, 'navbar_breadcrumb': block_navbar_breadcrumb}
-debug_info = '1=11&16=17&29=24&39=27&40=35&41=36&3=39&35=46&36=52&7=57'
+debug_info = '1=11&16=17&41=24&51=27&52=34&3=37&47=44&48=50&7=55'

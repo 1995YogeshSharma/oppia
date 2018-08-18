@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'is similar to\n\n<button type="button" ng-repeat="trainingDataHtml in trainingDataHtmlList" class="btn btn-default protractor-test-retrain-answer oppia-unresolved-answer-button" ng-click="openRetrainAnswerModal($index)">\n<span angular-html-bind="trainingDataHtml"></span>\n</button>'
+    yield u'is similar to\n\n<button type="button" ng-repeat="trainingDataHtml in trainingDataHtmlList" class="btn btn-default protractor-test-retrain-answer oppia-unresolved-answer-button" ng-click="openRetrainAnswerModal($index)">\n  <angular-html-bind html-data="trainingDataHtml">\n  </angular-html-bind>\n</button>'
 
 blocks = {}
 debug_info = ''

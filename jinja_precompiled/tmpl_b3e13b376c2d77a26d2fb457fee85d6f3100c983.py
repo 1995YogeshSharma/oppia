@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'domain/feedback_thread/FeedbackThreadObjectFactorySpec.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n* @fileoverview Unit tests for FeedbackThreadObjectFactory.\n*/\n\ndescribe(\'Feedback thread object factory\', function() {\n  beforeEach(module(\'oppia\'));\n  var FeedbackThreadObjectFactory = null;\n\n  beforeEach(inject(function($injector) {\n    FeedbackThreadObjectFactory = $injector.get(\'FeedbackThreadObjectFactory\');\n  }));\n\n  it(\'should create a new feedback thread from a backend dict.\', function(){\n    feedbackThreadBackendDict = {\n      last_updated: 1000,\n      original_author_username: \'author\',\n      status: \'accepted\',\n      subject: \'sample subject\',\n      summary: \'sample summary\',\n      message_count: 10,\n      state_name: \'state 1\',\n      thread_id: \'exp1.thread1\'\n    };\n\n    feedbackThread = FeedbackThreadObjectFactory.createFromBackendDict(\n      feedbackThreadBackendDict);\n    expect(feedbackThread.status).toEqual(\'accepted\');\n    expect(feedbackThread.subject).toEqual(\'sample subject\');\n    expect(feedbackThread.summary).toEqual(\'sample summary\');\n    expect(feedbackThread.originalAuthorName).toEqual(\'author\');\n    expect(feedbackThread.lastUpdated).toEqual(1000);\n    expect(feedbackThread.messageCount).toEqual(10);\n    expect(feedbackThread.stateName).toEqual(\'state 1\');\n    expect(feedbackThread.threadId).toEqual(\'exp1.thread1\');\n    expect(feedbackThread.isSuggestionThread()).toEqual(false);\n\n    messages = [{\n      text: \'message1\'\n    }, {\n      text: \'message2\'\n    }];\n    feedbackThread.setMessages(messages);\n    expect(feedbackThread.messages).toEqual(messages);\n  });\n});'
+
+blocks = {}
+debug_info = ''

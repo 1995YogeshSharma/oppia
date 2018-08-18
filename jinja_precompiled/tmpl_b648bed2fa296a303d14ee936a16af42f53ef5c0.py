@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<div class="oppia-loading-modal-body">\n  <p>\n    Reloading last saved version<loading-dots></loading-dots>\n  </p>\n</div>\n</script>\n\n<style>\n.oppia-loading-modal {\n  left: 50%;\n  margin-left: -40%;\n  margin-top: -100px;\n  top: 50%;\n}\n.oppia-loading-modal .modal-content {\n  border-radius: 0;\n  height: 100%;\n  width: 80%;\n}\n\n.oppia-loading-modal-body,\n.oppia-loading-modal-body p {\n  padding: 1%;\n  text-align: center;\n}'
+    yield u'<div class="oppia-loading-modal-body">\n  <p>\n    Reloading last saved version<loading-dots></loading-dots>\n  </p>\n</div>\n\n<style>\n  .oppia-loading-modal {\n    left: 50%;\n    margin-left: -40%;\n    margin-top: -100px;\n    top: 50%;\n  }\n  .oppia-loading-modal .modal-content {\n    border-radius: 0;\n    height: 100%;\n    width: 80%;\n  }\n\n  .oppia-loading-modal-body,\n  .oppia-loading-modal-body p {\n    padding: 1%;\n    text-align: center;\n  }\n</style>'
 
 blocks = {}
 debug_info = ''

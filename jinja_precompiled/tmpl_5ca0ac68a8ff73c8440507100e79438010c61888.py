@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'pages/skill_editor/editor_tab/add_misconception_modal_directive.html'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'<style>\n  .add-misconception-modal .oppia-editor-description {\n    font-size: .8em;\n    font-style: italic;\n  }\n\n  .add-misconception-modal .oppia-misconception-editor-section {\n    padding-bottom: 10px;\n  }\n</style>\n\n<div class="add-misconception-modal">\n  <div class="modal-header">\n    <h3>Add Misconception</h3>\n  </div>\n\n  <div class="modal-body">\n    <div class="oppia-rule-details-header">\n      <div class="oppia-misconception-editor-section">\n        <strong>Misconception Name</strong>\n        <div>\n          <span class="oppia-editor-description">Use a name that will be easy for question creators to understand.</span>\n        </div>\n        <div>\n          <input class="form-control" type="text" ng-model="misconceptionName">\n        </div>\n      </div>\n      <div class="oppia-misconception-editor-section">\n        <strong>Notes for Creators</strong>\n        <div>\n          <span class="oppia-editor-description">These are additional notes for question creators to understand how handling this misconception is useful for the skill being tested.</span>\n        </div>\n        <schema-based-editor schema="MISCONCEPTION_PROPERTY_FORM_SCHEMA" local-value="misconceptionNotes">\n        </schema-based-editor>\n      </div>\n      <div class="oppia-misconception-editor-section">\n        <strong>Default Feedback</strong>\n        <div>\n          <span class="oppia-editor-description">This is the default feedback given to learners when they have this misconception. Question creators may override this feedback.</span>\n        </div>\n        <schema-based-editor schema="MISCONCEPTION_PROPERTY_FORM_SCHEMA" local-value="misconceptionFeedback">\n        </schema-based-editor>\n      </div>\n    </div>\n  </div>\n\n  <div class="modal-footer">\n    <button class="btn btn-default" ng-click="cancel()">Cancel</button>\n    <button class="btn btn-success" ng-click="saveMisconception()" ng-disabled="!misconceptionName || misconceptionNotes.length === 0 || misconceptionFeedback.length === 0">Save</button>\n  </div>\n</div>'
+
+blocks = {}
+debug_info = ''

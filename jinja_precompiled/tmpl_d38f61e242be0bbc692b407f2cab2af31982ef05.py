@@ -19,18 +19,16 @@ def block_content(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'\n  <div class="oppia-content oppia-error-page-main-content" ng-controller="Error">\n    <br>\n\n    <div class="oppia-wide-panel oppia-error-wide-container">\n      <div class="oppia-wide-panel-content protractor-test-error-container">\n        <h1 class="oppia-error-h1">\n          <div ng-if="statusCode === 400">\n            <span translate="I18N_ERROR_HEADER_400"></span>\n            - Bad Request\n          </div>\n          <div ng-if="statusCode === 401">\n            <span translate="I18N_ERROR_HEADER_401"></span>\n            - Unauthorized\n          </div>\n          <div ng-if="statusCode === 404">\n            <span translate="I18N_ERROR_HEADER_404"></span>\n            - Page Not Found\n          </div>\n          <div ng-if="statusCode === 500">\n            <span translate="I18N_ERROR_HEADER_500"></span>\n            - System Error\n          </div>\n        </h1>\n\n        <br>\n\n        <img ng-src="<[oopsMintImgUrl]>" alt="Oops!" width="299" height="142"/>\n        <p>\n          <h2 ng-if="statusCode === 400" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_400"></h2>\n          <h2 ng-if="statusCode === 401" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_401"></h2>\n          <h2 ng-if="statusCode === 404" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_404"></h2>\n          <h2 ng-if="statusCode === 500" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_500"></h2>\n        </p>\n        <p><span translate="I18N_ERROR_NEXT_STEPS" translate-values="{issueTrackerUrl: \'https://github.com/oppia/oppia/issues/new\', homeUrl: \'/\'}"></span></p>\n      </div>\n    </div>\n  </div>\n  <style>\n    .oppia-error-h1 {\n      font-size: 1em;\n      margin: 1.33em 0;\n    }\n    .oppia-error-h2 {\n      font-size: 1.17em;\n      font-weight: 700;\n    }\n    @media screen and (min-width: 768px) {\n      .oppia-footer {\n        position: relative;\n      }\n    }\n  </style>\n'
+    yield u'\n  <div class="oppia-content oppia-error-page-main-content" ng-controller="Error">\n    <br>\n\n    <div class="oppia-wide-panel oppia-error-wide-container">\n      <div class="oppia-wide-panel-content protractor-test-error-container">\n        <h1 class="oppia-error-h1">\n          <div ng-if="statusCode === 400">\n            <span translate="I18N_ERROR_HEADER_400"></span>\n            - Bad Request\n          </div>\n          <div ng-if="statusCode === 401">\n            <span translate="I18N_ERROR_HEADER_401"></span>\n            - Unauthorized\n          </div>\n          <div ng-if="statusCode === 404">\n            <span translate="I18N_ERROR_HEADER_404"></span>\n            - Page Not Found\n          </div>\n          <div ng-if="statusCode === 500">\n            <span translate="I18N_ERROR_HEADER_500"></span>\n            - System Error\n          </div>\n        </h1>\n\n        <br>\n\n        <img ng-src="<[oopsMintImgUrl]>" alt="Oops!" width="299" height="142">\n        <p>\n          <h2 ng-if="statusCode === 400" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_400"></h2>\n          <h2 ng-if="statusCode === 401" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_401"></h2>\n          <h2 ng-if="statusCode === 404" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_404"></h2>\n          <h2 ng-if="statusCode === 500" class="oppia-error-h2" translate="I18N_ERROR_MESSAGE_500"></h2>\n        </p>\n        <p><span translate="I18N_ERROR_NEXT_STEPS" translate-values="{issueTrackerUrl: \'https://github.com/oppia/oppia/issues/new\', homeUrl: \'/\'}"></span></p>\n      </div>\n    </div>\n  </div>\n  <style>\n    .oppia-error-h1 {\n      font-size: 1em;\n      margin: 1.33em 0;\n    }\n    .oppia-error-h2 {\n      font-size: 1.17em;\n      font-weight: 700;\n    }\n    @media screen and (min-width: 768px) {\n      .oppia-footer {\n        position: relative;\n      }\n    }\n  </style>\n'
 
 def block_footer_js(context, missing=missing):
     resolve = context.resolve_or_missing
     undefined = environment.undefined
     if 0: yield None
     l_0_super = context.super('footer_js', block_footer_js)
-    l_0_TEMPLATE_DIR_PREFIX = resolve('TEMPLATE_DIR_PREFIX')
     pass
-    yield u'\n  %s\n  <script src="%s/pages/error/Error.js"></script>\n' % (
+    yield u'\n  %s\n  <script src="/templates/dev/head/pages/error/Error.js"></script>\n' % (
         escape(context.call(l_0_super)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
     )
 
 def block_maintitle(context, missing=missing):
@@ -73,4 +71,4 @@ def block_navbar_breadcrumb(context, missing=missing):
     yield u'\n'
 
 blocks = {'content': block_content, 'footer_js': block_footer_js, 'maintitle': block_maintitle, 'footer': block_footer, 'navbar_breadcrumb': block_navbar_breadcrumb}
-debug_info = '1=11&19=17&74=24&75=32&76=33&6=36&7=43&9=46&11=49&13=52&79=57&80=63&3=68'
+debug_info = '1=11&19=17&74=24&75=31&6=34&7=41&9=44&11=47&13=50&79=55&80=61&3=66'

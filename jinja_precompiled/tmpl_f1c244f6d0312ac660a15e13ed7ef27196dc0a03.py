@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<a ng-if="isLinkAvailable()" ng-href="<[link()]>">\n<img ng-src="<[src()]>" alt="" class="img-circle">\n</a>\n\n<img ng-if="!isLinkAvailable()" class="img-circle" ng-src="<[src()]>">'
+    yield u'<a ng-if="isLinkAvailable()" ng-href="<[link()]>">\n  <img ng-src="<[src()]>" alt="" class="img-circle">\n</a>\n\n<img ng-if="!isLinkAvailable()" class="img-circle" ng-src="<[src()]>">'
 
 blocks = {}
 debug_info = ''

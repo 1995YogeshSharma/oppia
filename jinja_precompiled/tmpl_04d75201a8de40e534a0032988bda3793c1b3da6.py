@@ -7,16 +7,13 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     l_0_DEV_MODE = resolve('DEV_MODE')
-    l_0_TEMPLATE_DIR_PREFIX = resolve('TEMPLATE_DIR_PREFIX')
-    l_0_ASSET_DIR_PREFIX = resolve('ASSET_DIR_PREFIX')
     t_1 = environment.filters['js_string']
     pass
     yield u'<!DOCTYPE html>\n<html ng-app="oppia" lang="<[currentLang]>" ng-controller="Maintenance" itemscope itemtype="http://schema.org/Organization">\n  <head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">\n    <title itemprop="name" translate="Down for Maintenance - Oppia"></title>\n    '
     template = environment.get_template('pages/header_css_libs.html', 'pages/maintenance/maintenance.html')
     for event in template.root_render_func(template.new_context(context.get_all(), True, {})):
         yield event
-    yield u"\n\n    <script>\n      var GLOBALS = {\n        ADDITIONAL_ANGULAR_MODULES: [],\n        ASSET_DIR_PREFIX: JSON.parse('%s'),\n        DEV_MODE: JSON.parse('%s')\n      };\n    </script>\n    " % (
-        escape(t_1((undefined(name='ASSET_DIR_PREFIX') if l_0_ASSET_DIR_PREFIX is missing else l_0_ASSET_DIR_PREFIX))), 
+    yield u"\n\n    <script>\n      var GLOBALS = {\n        ADDITIONAL_ANGULAR_MODULES: [],\n        DEV_MODE: JSON.parse('%s')\n      };\n    </script>\n    " % (
         escape(t_1((undefined(name='DEV_MODE') if l_0_DEV_MODE is missing else l_0_DEV_MODE))), 
     )
     template = environment.get_template('pages/header_js_libs.html', 'pages/maintenance/maintenance.html')
@@ -26,25 +23,7 @@ def root(context, missing=missing):
     template = environment.get_template('pages/footer_js_libs.html', 'pages/maintenance/maintenance.html')
     for event in template.root_render_func(template.new_context(context.get_all(), True, {})):
         yield event
-    yield u'\n    <script src="%s/app.js"></script>\n    <script src="%s/i18n.js"></script>\n    <script src="%s/services/AlertsService.js"></script>\n    <script src="%s/services/UtilsService.js"></script>\n    <script src="%s/services/ExplorationContextService.js"></script>\n    <script src="%s/services/IdGenerationService.js"></script>\n    <script src="%s/services/DebouncerService.js"></script>\n    <script src="%s/services/HtmlEscaperService.js"></script>\n    <script src="%s/services/RteHelperService.js"></script>\n    <script src="%s/services/contextual/UrlService.js"></script>\n    <script src="%s/components/forms/FormBuilder.js"></script>\n    <script src="%s/components/forms/ObjectEditorDirective.js"></script>\n    <script src="%s/domain/utilities/UrlInterpolationService.js"></script>\n    <script src="%s/pages/maintenance/Maintenance.js"></script>\n\n    <!-- These three files need to be loaded here only because they are dependencies for $provide, and Angular will not load without them. -->\n    <script src="%s/services/contextual/DeviceInfoService.js"></script>\n    <script src="%s/services/stateful/FocusManagerService.js"></script>\n    <script src="%s/services/TranslationFileHashLoaderService.js"></script>\n  </body>\n</html>' % (
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
-    )
+    yield u'\n    <script src="/templates/dev/head/app.js"></script>\n    <script src="/templates/dev/head/i18n.js"></script>\n    <script src="/templates/dev/head/services/AlertsService.js"></script>\n    <script src="/templates/dev/head/services/UtilsService.js"></script>\n    <script src="/templates/dev/head/services/ContextService.js"></script>\n    <script src="/templates/dev/head/services/IdGenerationService.js"></script>\n    <script src="/templates/dev/head/services/DebouncerService.js"></script>\n    <script src="/templates/dev/head/services/HtmlEscaperService.js"></script>\n    <script src="/templates/dev/head/services/RteHelperService.js"></script>\n    <script src="/templates/dev/head/services/contextual/UrlService.js"></script>\n    <script src="/templates/dev/head/components/forms/FormBuilder.js"></script>\n    <script src="/templates/dev/head/components/forms/ObjectEditorDirective.js"></script>\n    <script src="/templates/dev/head/domain/utilities/UrlInterpolationService.js"></script>\n    <script src="/templates/dev/head/pages/maintenance/Maintenance.js"></script>\n\n    <!-- These three files need to be loaded here only because they are dependencies for $provide, and Angular will not load without them. -->\n    <script src="/templates/dev/head/services/contextual/DeviceInfoService.js"></script>\n    <script src="/templates/dev/head/services/stateful/FocusManagerService.js"></script>\n    <script src="/templates/dev/head/services/TranslationFileHashLoaderService.js"></script>\n  </body>\n</html>'
 
 blocks = {}
-debug_info = '7=15&12=19&13=20&16=22&52=26&53=30&54=31&55=32&56=33&57=34&58=35&59=36&60=37&61=38&62=39&63=40&64=41&65=42&66=43&69=44&70=45&71=46'
+debug_info = '7=13&12=17&15=19&51=23'

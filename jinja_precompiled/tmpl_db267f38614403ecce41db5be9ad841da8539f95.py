@@ -1,0 +1,13 @@
+from __future__ import division
+from jinja2.runtime import LoopContext, TemplateReference, Macro, Markup, TemplateRuntimeError, missing, concat, escape, markup_join, unicode_join, to_string, identity, TemplateNotFound, Namespace
+name = 'services/GenerateContentIdService.js'
+
+def root(context, missing=missing):
+    resolve = context.resolve_or_missing
+    undefined = environment.undefined
+    if 0: yield None
+    pass
+    yield u'// Copyright 2018 The Oppia Authors. All Rights Reserved.\n//\n// Licensed under the Apache License, Version 2.0 (the "License");\n// you may not use this file except in compliance with the License.\n// You may obtain a copy of the License at\n//\n//      http://www.apache.org/licenses/LICENSE-2.0\n//\n// Unless required by applicable law or agreed to in writing, software\n// distributed under the License is distributed on an "AS-IS" BASIS,\n// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n// See the License for the specific language governing permissions and\n// limitations under the License.\n\n/**\n * @fileoverview A service for generating random and unique content_id for\n * SubtitledHtml domain objects.\n */\n\noppia.factory(\'GenerateContentIdService\', [\n  \'StateContentIdsToAudioTranslationsService\', \'COMPONENT_NAME_FEEDBACK\',\n  \'COMPONENT_NAME_HINT\', function(\n      StateContentIdsToAudioTranslationsService, COMPONENT_NAME_FEEDBACK,\n      COMPONENT_NAME_HINT) {\n    var generateIdForHintOrFeedback = function(componentName) {\n      var contentIdList = StateContentIdsToAudioTranslationsService\n        .displayed.getAllContentId();\n      var searchKey = componentName + \'_\';\n      var count = 0;\n      for (contentId in contentIdList) {\n        if (contentIdList[contentId].indexOf(searchKey) === 0) {\n          var tempCount = parseInt(contentIdList[contentId].split(\'_\')[1]);\n          if (tempCount > count) {\n            count = tempCount;\n          }\n        }\n      }\n      return (searchKey + String(count + 1));\n    };\n\n    var _getNextId = function(componentName) {\n      if (componentName === COMPONENT_NAME_FEEDBACK ||\n          componentName === COMPONENT_NAME_HINT) {\n        return generateIdForHintOrFeedback(componentName);\n      } else {\n        throw Error(\'Unknown component name provided.\');\n      }\n    };\n    return {\n      getNextId: function(componentName) {\n        return _getNextId(componentName);\n      }\n    };\n  }]);'
+
+blocks = {}
+debug_info = ''

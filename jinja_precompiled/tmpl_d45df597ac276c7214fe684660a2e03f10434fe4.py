@@ -7,7 +7,7 @@ def root(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     pass
-    yield u'<select class="form-control" ng-model="$parent.$parent.localValue"\n      ng-options="choice as choice for choice in choices()" required\n      ng-disabled="isDisabled()">\n</select>'
+    yield u'<select class="form-control" ng-model="$parent.$parent.localValue"\n        ng-options="choice as choice for choice in choices()" required\n        ng-disabled="isDisabled()">\n</select>'
 
 blocks = {}
 debug_info = ''

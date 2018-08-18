@@ -19,11 +19,9 @@ def block_footer_js(context, missing=missing):
     undefined = environment.undefined
     if 0: yield None
     l_0_super = context.super('footer_js', block_footer_js)
-    l_0_TEMPLATE_DIR_PREFIX = resolve('TEMPLATE_DIR_PREFIX')
     pass
-    yield u'\n  %s\n  <script src="%s/pages/splash/Splash.js"></script>\n' % (
+    yield u'\n  %s\n  <script src="/templates/dev/head/pages/splash/Splash.js"></script>\n' % (
         escape(context.call(l_0_super)), 
-        escape((undefined(name='TEMPLATE_DIR_PREFIX') if l_0_TEMPLATE_DIR_PREFIX is missing else l_0_TEMPLATE_DIR_PREFIX)), 
     )
 
 def block_prerender(context, missing=missing):
@@ -76,4 +74,4 @@ def block_navbar_breadcrumb(context, missing=missing):
     yield u'\n'
 
 blocks = {'footer_js': block_footer_js, 'prerender': block_prerender, 'footer': block_footer, 'content': block_content, 'maintitle': block_maintitle, 'header_js': block_header_js, 'navbar_breadcrumb': block_navbar_breadcrumb}
-debug_info = '1=11&219=17&220=25&221=26&3=29&215=36&216=42&18=47&7=54&11=61&12=68&15=71'
+debug_info = '1=11&219=17&220=24&3=27&215=34&216=40&18=45&7=52&11=59&12=66&15=69'
