@@ -75,11 +75,11 @@ class AboutPage(base.BaseHandler):
     @acl_decorators.open_access
     def get(self):
         """Handles GET requests."""
-        self.values.update({
-            'meta_description': feconf.ABOUT_PAGE_DESCRIPTION,
-            'nav_mode': feconf.NAV_MODE_ABOUT,
-        })
-        self.render_template('pages/about/about.html')
+        #self.values.update({
+        #    'meta_description': feconf.ABOUT_PAGE_DESCRIPTION,
+        #    'nav_mode': feconf.NAV_MODE_ABOUT,
+        #})
+        self.render_template('pages/base.html')
 
 
 class GetStartedPage(base.BaseHandler):

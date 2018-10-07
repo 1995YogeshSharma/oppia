@@ -17,10 +17,10 @@
  */
 
 oppia.controller('Base', [
-  '$scope', '$rootScope', '$document', 'AlertsService', 'BackgroundMaskService',
-  'SidebarStatusService', 'SITE_NAME', 'DEV_MODE',
-  function($scope, $rootScope, $document, AlertsService, BackgroundMaskService,
-      SidebarStatusService, SITE_NAME, DEV_MODE) {
+  '$scope', '$rootScope', '$document', '$location', 'AlertsService', 'BackgroundMaskService',
+  'SidebarStatusService', 'SITE_NAME', 'DEV_MODE', 'UrlInterpolationService',
+  function($scope, $rootScope, $document, $location, AlertsService, BackgroundMaskService,
+      SidebarStatusService, SITE_NAME, DEV_MODE, UrlInterpolationService) {
     $scope.siteName = SITE_NAME;
     $scope.AlertsService = AlertsService;
     $scope.currentLang = 'en';
@@ -28,6 +28,26 @@ oppia.controller('Base', [
     $scope.siteFeedbackFormUrl = GLOBALS.SITE_FEEDBACK_FORM_URL;
     $scope.promoBarIsEnabled = GLOBALS.PROMO_BAR_IS_ENABLED;
     $scope.promoBarMessage = GLOBALS.PROMO_BAR_MESSAGE;
+
+    $scope.contentDirectivePath = function() {
+      if( window.location.pathname === '/about') {
+        return (
+          UrlInterpolationService.getDirectiveTemplateUrl(
+            '/pages/about/about_content.html'));  
+      }
+      else {
+        return (UrlInterpolationService.getDirectiveTemplateUrl(
+          '/pages/empty_page.html'));    
+      }
+    }
+    $scope.contentControllerName = function() {
+      if( window.location.pathname === '/about') {
+        return 'About';
+      } else {
+        return null;
+      }
+    }
+    console.log($scope.contentDirectivePath());
 
     $rootScope.DEV_MODE = DEV_MODE;
     // If this is nonempty, the whole page goes into 'Loading...' mode.
